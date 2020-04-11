@@ -17,7 +17,7 @@ RUN mkdir /social_team
 WORKDIR /social_team
 
 RUN addgroup --system user && adduser --system --no-create-home --group user
-RUN chown -R user:user /app && chmod -R 755 /app
+RUN chown -R user:user /social_team && chmod -R 755 /social_team
 
 ## install dependencies
 COPY ./requirements.txt /requirements.txt
