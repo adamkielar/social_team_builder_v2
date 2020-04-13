@@ -19,6 +19,8 @@ from social_team import views
 
 
 urlpatterns = [
-    path('', views.HomeView.as_view(), name='home'),
+    path('', views.HomePageView.as_view(), name='home'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('markdownx/', include('markdownx.urls')),
 ]

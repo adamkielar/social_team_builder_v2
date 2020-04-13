@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import Client, TestCase
 
-class HomeViewTest(TestCase):
+class HomePageViewTest(TestCase):
     def setUp(self):
         self.client = Client()
     def test_home_view_render(self):
