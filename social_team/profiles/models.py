@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils import timezone
-from django.utils.text import slugify
 
 from cropperjs.models import CropperImageField
 from markdownx.models import MarkdownxField
@@ -30,7 +28,7 @@ class Profile(models.Model):
     avatar = CropperImageField(default='avatars/sample.png',
                                upload_to='avatars/')
     bio = MarkdownxField(default='')
-    date_joined = models.DateTimeField(default=timezone.now)
+    date_joined = models.DateTimeField(auto_now_add=True)
     main_skills = models.ManyToManyField('MainSkill', related_name='mainskill')
     other_skills = models.ManyToManyField('OtherSkill',
                                           related_name='otherskill')
