@@ -39,8 +39,8 @@ class User(AbstractBaseUser, PermissionsMixin):
                                upload_to='avatars/')
     bio = MarkdownxField(default='')
     date_joined = models.DateTimeField(default=timezone.now)
-    main_skills = models.ManyToManyField('MainSkill')
-    other_skills = models.ManyToManyField('OtherSkill')
+    main_skills = models.ManyToManyField('MainSkill', related_name=mainskill)
+    other_skills = models.ManyToManyField('OtherSkill', related_name=otherskill)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -55,17 +55,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class MainSkill(models.Model):
     """Model for user main skills"""
-    skill_name = models.CharField(max_length=255,
+    main_skill = models.CharField(max_length=255,
                                   choices=POSITIONS,
                                   blank=True)
 
     def __str__(self):
-        return self.skill_name
+        return self.main_skill
 
 
 class OtherSkill(models.Model):
     """Model for user own skills"""
-    skill_name = models.CharField(max_length=255, blank=True)
+    other_skill = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.other_skill
 
 
 class UserProject(models.Model):
@@ -74,12 +77,7 @@ class UserProject(models.Model):
                              on_delete=models.CASCADE,
                              related_name='user_projects')
     project_name = models.CharField(max_length=255, blank=True)
-    slug = models.SlugField(allow_unicode=True, unique=True)
     url = models.URLField()
 
     def __str__(self):
         return self.project_name
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.project_name)
-        super().save(*args, **kwargs)
