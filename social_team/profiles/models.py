@@ -29,8 +29,8 @@ class Profile(models.Model):
                                upload_to='avatars/')
     bio = MarkdownxField(default='')
     date_joined = models.DateTimeField(auto_now_add=True)
-    main_skills = models.ManyToManyField('MainSkill', related_name='mainskill')
-    other_skills = models.ManyToManyField('OtherSkill',
+    main_skills = models.ManyToManyField(MainSkill, related_name='mainskill')
+    other_skills = models.ManyToManyField(OtherSkill,
                                           related_name='otherskill')
 
     def __str__(self):
