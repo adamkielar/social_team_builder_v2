@@ -9,6 +9,6 @@ from django.views import generic
 from profiles import models
 
 
-class UserProfile(generic.DetailView):
+class UserProfile(LoginRequiredMixin, generic.DetailView):
     model = models.Profile
-    template_name = 
+    template_name = 'profiles/profile.html'
