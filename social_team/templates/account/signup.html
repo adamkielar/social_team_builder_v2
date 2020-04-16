@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block head_title %}Sign Up | {{ block.super }}{% endblock head_title %}
+
+{% block body_content %}
+<div class="bounds">
+    <div class="grid-30 centered">
+      <h2>Sign Up</h2>
+      <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" button-primary">Sign Up</button>
+        <a class="button" href="">Sign In</a>
+      </form>
+    </div>
+  </div>
+{% endblock body_content %}

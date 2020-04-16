@@ -1,0 +1,18 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: [example.com] Please Confirm Your E-mail Address
+From: webmaster@localhost
+To: adam@adamkielar.pl
+Date: Thu, 16 Apr 2020 18:43:36 -0000
+Message-ID: <158706261684.15.15423190105783995386@dc0078115d6b>
+
+Hello from example.com!
+
+You're receiving this e-mail because user adam@adamkielar.pl has given yours as an e-mail address to connect their account.
+
+To confirm this is correct, go to http://0.0.0.0:8001/accounts/confirm-email/MQ:1jP9U8:3CV-nlD7lx7lAaRe9RGkZo_uCnQ/
+
+Thank you from example.com!
+example.com
+-------------------------------------------------------------------------------

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 from social_team import views
 
 
@@ -23,4 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('markdownx/', include('markdownx.urls')),
+    path('profiles/', include('profiles.urls')),
+    path('projects/', include('projects.urls')),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

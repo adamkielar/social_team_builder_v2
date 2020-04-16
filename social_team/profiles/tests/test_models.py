@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from social_team.profiles.models.models import MainSkill, OtherSkill, UserProject
+from profiles.models import MainSkill, OtherSkill, UserProject
 
 
 class ProfilesModelTest(TestCase):
@@ -23,10 +23,8 @@ class ProfilesModelTest(TestCase):
         """Test create user project"""
         email = 'test@test.pl'
         password = 'testpass'
-        full_name = 'testname'
         user = get_user_model().objects.create_user(email=email,
-                                                    password=password,
-                                                    full_name=full_name)
+                                                    password=password)
         project_name = 'Magic'
         url = 'http://www.test.pl'
         user_project = UserProject.objects.create(user=user,

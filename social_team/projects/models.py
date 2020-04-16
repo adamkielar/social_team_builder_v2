@@ -4,7 +4,7 @@ from django.utils.text import slugify
 
 from markdownx.models import MarkdownxField
 
-from social_team.profiles.models import Profile, MainSkill, OtherSkill
+from profiles.models import Profile, MainSkill, OtherSkill
 
 PROJECT_STATUS = (('OPEN', 'Open'), ('CLOSED', 'Closed'))
 
@@ -17,7 +17,8 @@ APPLICANT_STATUS = (('APPROVED', 'Approved'), ('REJECTED', 'Rejected'),
 class Project(models.Model):
     """Model for Project"""
     owner = models.ForeignKey(Profile,
-                              on_delete=models.CASCADE, related_name='projects')
+                              on_delete=models.CASCADE,
+                              related_name='projects')
     title = models.CharField(max_length=255, unique=True)
     description = MarkdownxField(max_length=2500, default='')
     project_timeline = models.TextField(default='')
@@ -48,7 +49,9 @@ class Position(models.Model):
                                         related_name='positions_main')
     other_skill = models.ManyToManyField(OtherSkill,
                                          related_name='positions_other')
-    position_status = models.CharField(max_length=255, choices=POSITION_STATUS, blank=True)
+    position_status = models.CharField(max_length=255,
+                                       choices=POSITION_STATUS,
+                                       blank=True)
     slug = models.SlugField(allow_unicode=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -65,17 +68,20 @@ class Position(models.Model):
 
 class Applicant(models.Model):
     """Model for applicant to apply for position in project"""
-    user_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='applicants')
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_applicants')
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name='position_applicants')
-    applicant_status = models.CharField(max_length=255, choices=APPLICANT_STATUS, blank=True)
+    user_profile = models.ForeignKey(Profile,
+                                     on_delete=models.CASCADE,
+                                     related_name='applicants')
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
+                                related_name='project_applicants')
+    position = models.ForeignKey(Position,
+                                 on_delete=models.CASCADE,
+                                 related_name='position_applicants')
+    applicant_status = models.CharField(max_length=255,
+                                        choices=APPLICANT_STATUS,
+                                        blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ['user', 'position']
+        #unique_together = ['user', 'position']
         ordering = ['-created_at']
-
-    def __str__(self):
-        return self.user_profile.full_name
-
-    
