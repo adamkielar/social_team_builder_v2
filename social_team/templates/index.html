@@ -56,7 +56,7 @@
               <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
               <li><a href="{% url 'account_login' %}">Sign In</a></li>
               {% else %}
-              <li><a href="{% url 'profiles:user_profile' pk=profile.user.pk %}">Profile</a></li>
+              <li><a href="{% url 'profiles:user_profile' slug=user.profile.slug %}">Profile</a></li>
               <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
               {% endif %}
             </ul>

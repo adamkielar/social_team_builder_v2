@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block head_title %}Account Inactive| {{ block.super }}{% endblock head_title %}
+
+{% block body_content %}
+<div class="grid-40 centered">
+<div class="circle--article--body">
+    <h1>{% trans "Account Inactive" %}</h1>
+
+    <p>{% trans "This account is inactive." %}</p>
+</div>
+</div>
+{% endblock body_content %}
