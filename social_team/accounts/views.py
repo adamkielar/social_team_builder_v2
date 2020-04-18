@@ -1,31 +1,39 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Group, Permission
-from django.urls import reverse
 from django.db import IntegrityError, transaction
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.views.generic import TemplateView, DetailView, UpdateView
 from django.shortcuts import get_object_or_404
-from django.views import generic
 
-from profiles import models, forms
+from accounts import models, forms
 
 
-class UserProfile(LoginRequiredMixin, generic.DetailView):
+class HomePageView(TemplateView):
+    template_name = 'index.html'
+
+class UserProfile(LoginRequiredMixin, DetailView):
     model = models.Profile
     template_name = 'profiles/profile.html'
 
     def get(self, request, *args, **kwargs):
-        profiles = get_object_or_404(models.Profile, slug=self.kwargs.get('slug'))
+        profiles = get_object_or_404(models.Profile, pk=self.kwargs.get('pk'))
 
-        return super().get(request, *args, **kwargs)
+    def get_slug_field(self):
+        return self.slug_field
 
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(
-            user__profile__slug__iexact=self.kwargs.get('slug')
+            user__profile__id__iexact=self.kwargs.get('pk')
         )
 
+    def get_redirect_url(self, *args, **kwargs):
+        return self.get_object().get_absolute_url()
 
-class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
+
+class UserProfileEdit(LoginRequiredMixin, UpdateView):
     form_class = forms.ProfileForm
     model = models.Profile
     template_name = 'profiles/profile_edit.html'

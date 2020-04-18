@@ -4,7 +4,7 @@ from django.utils.text import slugify
 
 from markdownx.models import MarkdownxField
 
-from profiles.models import Profile, MainSkill, OtherSkill
+from accounts.models import Profile, MainSkill, OtherSkill
 
 PROJECT_STATUS = (('OPEN', 'Open'), ('CLOSED', 'Closed'))
 

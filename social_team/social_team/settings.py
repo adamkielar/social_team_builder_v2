@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'cropperjs',
     'markdownx',
     'accounts',
-    'profiles',
     'projects',
 ]
 
@@ -170,7 +169,7 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'accounts:home' 
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'

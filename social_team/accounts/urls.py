@@ -1,14 +1,15 @@
 from django.urls import path
 
-from profiles import views
+from accounts import views
 
-app_name = 'profiles'
+app_name = 'accounts'
 
 urlpatterns = [
-    path('profile/<slug:slug>/',
+    path('', views.HomePageView.as_view(), name='home'),
+    path('profile/<int:pk>/',
          views.UserProfile.as_view(),
          name='user_profile'),
-    path('profile/edit/<slug:slug>/',
+    path('profile/edit/<int:pk>/',
          views.UserProfileEdit.as_view(),
          name='user_profile_edit'),
 ]

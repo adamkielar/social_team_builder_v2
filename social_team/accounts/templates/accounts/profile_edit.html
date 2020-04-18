@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
+{{ form.media }}
 
 {% block body_content %}
   <div class="circle--actions--bar">
@@ -64,10 +65,7 @@
 
       <div class="circle--secondary--module">
         <div class="circle--primary--avatar">
-          <a class="button">
-            Upload Photo
-            <input type="file">
-          </a>
+            {{form.avatar }}
         </div>
       </div>
 
