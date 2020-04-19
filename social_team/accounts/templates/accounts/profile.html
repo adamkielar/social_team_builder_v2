@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block body_content %}
@@ -6,7 +6,7 @@
     <nav class="bounds">
       <ul class="circle--pill--list">
         <li><a href="applications.html">Applications</a></li>
-        <li><a class="selected" href="{% url 'profiles:user_profile' slug=user.profile.slug %}">Profile</a></li>
+        <li><a class="selected" href="{% url 'accounts:profile_detail' pk=user.id %}">Profile</a></li>
       </ul>
     </nav>
   </div>
@@ -17,14 +17,16 @@
         <h2>Profile</h2>
       </div>
       <div class="circle--fluid--cell circle--fluid--secondary">
-        <a class="button icon-on-left" href="{% url 'profiles:user_profile_edit' slug=user.profile.slug %}">Edit</a>
+        <a class="button icon-on-left" href="{% url 'accounts:profile_edit' pk=user.id %}">Edit</a>
       </div>
     </div>
 
     <div class="grid-70">
-      <h1>{{ profile.full_name|title }}</h1>
+      <h3>{{ user.full_name.label|title }}</h3>
+      <h1>{{ user.full_name|title }}</h1>
       <div class="circle--article--body">
-        <p>{{ profile.bio }}</p>
+      <h3>{{ user.bio.label|title }}</h3>
+        <p>{{ user.bio }}</p>
       </div>
 
       <h2>Past Projects</h2>
@@ -59,9 +61,19 @@
     <div class="grid-25 grid-push-5">
 
       <div class="circle--secondary--module">
-          <img class="circle--primary--avatar" src="{{ profile.avatar.url }}"/>
+          <img class="circle--primary--avatar" src="{{ user.avatar.url }}"/>
       </div>
 
+    <div class="circle--secondary--module">
+        <h4>My Skills</h4>
+        <ul class="circle--clone--list">
+        {% for skill in mainskills %}
+          <li>
+            {{ skill }}
+          </li>
+          {% endfor %}
+        </ul>
+    </div>
       <div class="circle--secondary--module">
         <h4>My Skills</h4>
         <ul class="unloaded">

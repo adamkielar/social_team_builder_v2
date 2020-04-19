@@ -1,13 +1,14 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{{ form.media }}
+{{ avatar_form.media }}
+
 
 {% block body_content %}
   <div class="circle--actions--bar">
     <nav class="bounds">
       <ul class="circle--pill--list">
         <li><a href="applications.html">Applications</a></li>
-        <li><a class="selected" href="{% url 'profiles:user_profile' slug=user.profile.slug %}">Profile</a></li>
+        <li><a class="selected" href="{% url 'accounts:profile_detail' pk=user.id %}">Profile</a></li>
       </ul>
     </nav>
   </div>
@@ -26,10 +27,14 @@
 
     <div class="grid-70">
       <div class="circle--input--h1">
-      {{ form.full_name }}
+      {{ profile_form.full_name.label}}
+      {{ profile_form.full_name }}
       </div>
       <div class="circle--article--body">
-        {{ form.bio }}
+        <div class="circle--input--h1">
+        {{ profile_form.bio.label }}
+        {{ profile_form.bio }}
+        </div>
       </div>
 
       <h2>Past Projects</h2>
@@ -63,19 +68,22 @@
 
     <div class="grid-25 grid-push-5">
 
+      <div class="">
+            <div class="">
+              {{ avatar_form }}
+          </div>
+      </div>
+
       <div class="circle--secondary--module">
-        <div class="circle--primary--avatar">
-            {{form.avatar }}
-        </div>
+      <br>
+            {{ mainskill_form.label|title}}
+            {{ mainskill_form }}
       </div>
 
       <div class="circle--secondary--module">
         <h4>My Skills</h4>
         <ul class="circle--clone--list">
           <li>
-            <input type="text" placeholder="Skill" />
-            <a class="circle--clone--add">Add Skill</a>
-            <a class="circle--clone--remove">Remove</a>
           </li>
         </ul>
       </div>
@@ -93,5 +101,9 @@
       </div>
     </div>
   </form>
+  {{ form.errors }}
   </div>
 {% endblock body_content %}
+{% block js %}
+{{ avatar_form.media }}
+{% endblock js %}

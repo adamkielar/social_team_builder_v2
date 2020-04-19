@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.text import slugify
 from django.urls import reverse
@@ -32,6 +34,12 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username"""
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+    full_name = models.CharField(max_length=255, blank=False, default='')
+    avatar = CropperImageField(dimensions=(240, 240), default='avatars/sample.png', upload_to='avatars/')
+    bio = MarkdownxField()
+    date_joined = models.DateTimeField(auto_now_add=True)
+    main_skills = models.ManyToManyField('MainSkill', related_name='mainskills')
+    other_skills = models.ManyToManyField('OtherSkill', related_name='otherskills')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -40,65 +48,27 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
     def __str__(self):
-        return self.email
-
-
-POSITIONS = (
-        ('ANDROID_DEVELOPER', 'Android Developer'),
-        ('DESIGNER', 'Designer'), 
-        ('IOS_DEVELOPER', 'IOS Developer'),
-        ('JAVA_DEVELOPER', 'Java Developer'), 
-        ('PHP_DEVELOPER', 'PHP Developer'),
-        ('PYTHON_DEVELOPER', 'Python Developer'), 
-        ('RAILS_DEVELOPER', 'Rails Developer'),
-        ('WORDPRESS_DEVELOPER', 'Wordpress Developer'), 
-        ('OTHER', 'Other')
-    )
+        return self.full_name
 
 
 class MainSkill(models.Model):
     """Model for user main skills"""
-    main_skill = models.CharField(max_length=255,
-                                  choices=POSITIONS,
-                                  blank=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.main_skill
+        return self.name
 
 
 class OtherSkill(models.Model):
     """Model for user own skills"""
-    other_skill = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.other_skill
-
-
-class Profile(models.Model):
-    """Custom user model that supports using email instead of username"""
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255, blank=False, default='')
-    avatar = CropperImageField(default='avatars/sample.png',
-                               upload_to='avatars/')
-    bio = MarkdownxField(default='')
-    date_joined = models.DateTimeField(auto_now_add=True)
-    main_skills = models.ManyToManyField(MainSkill, related_name='mainskill')
-    other_skills = models.ManyToManyField(OtherSkill,
-                                          related_name='otherskill')
-    slug = models.SlugField(allow_unicode=True, unique=True)
-
-    def __str__(self):
-        return self.full_name
+        return self.name
 
     def save(self, *args, **kwargs):
-        email = '_'.join(self.user.email.split('@'))
-        self.slug = slugify(email)
-        super().save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse("profiles:user_profile", kwargs={"slug": self.slug})
-    
+        self.name = self.name.lower()
+        return (OtherSkill, self).save(*args, **kwargs)
 
 
 class UserProject(models.Model):
@@ -106,7 +76,7 @@ class UserProject(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
                              related_name='user_projects')
-    project_name = models.CharField(max_length=255, blank=True)
+    project_name = models.CharField(max_length=255, blank=True, null=True)
     url = models.URLField()
 
     def __str__(self):

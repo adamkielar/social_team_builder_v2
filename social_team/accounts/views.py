@@ -1,55 +1,52 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, Permission
 from django.db import IntegrityError, transaction
-from django.urls import reverse
-from django.http import HttpResponseRedirect
-from django.views.generic import TemplateView, DetailView, UpdateView
-from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404, render
 
-from accounts import models, forms
+from .forms import ProfileForm, AvatarForm, UserProjectForm, MainSkillForm
+from .models import User, MainSkill
 
 
-class HomePageView(TemplateView):
-    template_name = 'index.html'
+@login_required
+def profile_all(request):
+    return render(request, 'accounts/index.html')
 
-class UserProfile(LoginRequiredMixin, DetailView):
-    model = models.Profile
-    template_name = 'profiles/profile.html'
 
-    def get(self, request, *args, **kwargs):
-        profiles = get_object_or_404(models.Profile, pk=self.kwargs.get('pk'))
+@login_required
+def profile_detail(request, pk):
+    mainskills = MainSkill.objects.all().filter(id=pk)
+    profile = User.objects.get(pk=pk)
+    return render(request, 'accounts/profile.html', {'profile': profile, 'mainskills': mainskills})
 
-    def get_slug_field(self):
-        return self.slug_field
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(
-            user__profile__id__iexact=self.kwargs.get('pk')
+@login_required
+def profile_edit(request, pk):
+    profile_form = ProfileForm(instance=request.user)
+    avatar_from = AvatarForm(instance=request.user)
+    mainskill_form = MainSkillForm(instance=request.user)
+
+    if request.method == "POST":
+        profile_form = ProfileForm(request.POST, instance=request.user)
+        avatar_from = AvatarForm(
+            request.POST, request.FILES, instance=request.user
         )
+        mainskill_form = MainSkillForm(request.POST, instance=request.user)
+        if profile_form.is_valid() and avatar_from.is_valid() and mainskill_form.is_valid():
+            profile_form.save()
+            avatar_from.save()
+            mainskill_form.save()
+            messages.success(request, "Profile updated !")
+            return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={'pk': request.user.id}))
 
-    def get_redirect_url(self, *args, **kwargs):
-        return self.get_object().get_absolute_url()
-
-
-class UserProfileEdit(LoginRequiredMixin, UpdateView):
-    form_class = forms.ProfileForm
-    model = models.Profile
-    template_name = 'profiles/profile_edit.html'
-
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
-
-    def form_valid(self, form):
-        with transaction.atomic():
-            self.object = form.save(commit=False)
-            self.object.user = self.request.user
-            self.object.save()
-            return super().form_valid(form)
-
-    def get_redirect_url(self, *args, **kwargs):
-        return self.get_object().get_absolute_url()
+    return render(
+        request,
+        "accounts/profile_form.html",
+        {
+            "profile_form": profile_form,
+            "avatar_form": avatar_from,
+            "mainskill_form": mainskill_form,
+        },
+    )

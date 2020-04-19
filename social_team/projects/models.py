@@ -4,7 +4,6 @@ from django.utils.text import slugify
 
 from markdownx.models import MarkdownxField
 
-from accounts.models import Profile, MainSkill, OtherSkill
 
 PROJECT_STATUS = (('OPEN', 'Open'), ('CLOSED', 'Closed'))
 
@@ -16,7 +15,7 @@ APPLICANT_STATUS = (('APPROVED', 'Approved'), ('REJECTED', 'Rejected'),
 
 class Project(models.Model):
     """Model for Project"""
-    owner = models.ForeignKey(Profile,
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE,
                               related_name='projects')
     title = models.CharField(max_length=255, unique=True)
@@ -42,12 +41,12 @@ class Project(models.Model):
 
 class Position(models.Model):
     """Model for project positions to apply"""
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     description = MarkdownxField(default='')
-    main_skill = models.ManyToManyField(MainSkill,
+    main_skills = models.ManyToManyField('accounts.MainSkill',
                                         related_name='positions_main')
-    other_skill = models.ManyToManyField(OtherSkill,
+    other_skills = models.ManyToManyField('accounts.OtherSkill',
                                          related_name='positions_other')
     position_status = models.CharField(max_length=255,
                                        choices=POSITION_STATUS,
@@ -68,7 +67,7 @@ class Position(models.Model):
 
 class Applicant(models.Model):
     """Model for applicant to apply for position in project"""
-    user_profile = models.ForeignKey(Profile,
+    user_profile = models.ForeignKey(settings.AUTH_USER_MODEL,
                                      on_delete=models.CASCADE,
                                      related_name='applicants')
     project = models.ForeignKey(Project,
