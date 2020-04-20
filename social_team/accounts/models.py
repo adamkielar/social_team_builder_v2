@@ -61,7 +61,7 @@ class MainSkill(models.Model):
 
 class OtherSkill(models.Model):
     """Model for user own skills"""
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.name

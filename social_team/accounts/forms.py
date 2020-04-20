@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import formset_factory
 
 from . import models
 
@@ -32,11 +33,10 @@ class AvatarForm(forms.ModelForm):
             'admin/js/jquery.init.js',
         )
 
-
 class UserProjectForm(forms.ModelForm):
     class Meta:
         model = models.UserProject
-        fields = ('project_name', 'url')
+        fields = ['project_name', 'url']
 
 
 class MainSkillForm(forms.ModelForm):
@@ -52,3 +52,11 @@ class MainSkillForm(forms.ModelForm):
         if not data:
             raise forms.ValidationError("Please add at least one item to Skills")
         return data
+
+
+class OtherSkillForm(forms.ModelForm):
+    class Meta:
+        model = models.OtherSkill
+        fields = ['name']
+
+

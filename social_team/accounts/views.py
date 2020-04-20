@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 
 from .forms import ProfileForm, AvatarForm, UserProjectForm, MainSkillForm
-from .models import User, MainSkill
+from .models import User, MainSkill, UserProject
 
 
 @login_required
@@ -17,9 +17,9 @@ def profile_all(request):
 
 @login_required
 def profile_detail(request, pk):
-    mainskills = MainSkill.objects.all().filter(id=pk)
-    profile = User.objects.get(pk=pk)
-    return render(request, 'accounts/profile.html', {'profile': profile, 'mainskills': mainskills})
+    profile = User.objects.all().filter(pk=pk)
+    user_projects = UserProject.objects.all().filter(pk=request.user.id)
+    return render(request, 'accounts/profile.html', {'profile': profile, 'user_projects': user_projects})
 
 
 @login_required
