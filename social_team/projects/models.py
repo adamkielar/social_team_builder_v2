@@ -41,7 +41,7 @@ class Project(models.Model):
 
 class Position(models.Model):
     """Model for project positions to apply"""
-    project = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     description = MarkdownxField(default='')
     main_skills = models.ManyToManyField('accounts.MainSkill',
@@ -70,10 +70,10 @@ class Applicant(models.Model):
     user_profile = models.ForeignKey(settings.AUTH_USER_MODEL,
                                      on_delete=models.CASCADE,
                                      related_name='applicants')
-    project = models.ForeignKey(Project,
+    project = models.ForeignKey('Project',
                                 on_delete=models.CASCADE,
                                 related_name='project_applicants')
-    position = models.ForeignKey(Position,
+    position = models.ForeignKey('Position',
                                  on_delete=models.CASCADE,
                                  related_name='position_applicants')
     applicant_status = models.CharField(max_length=255,

@@ -8,11 +8,16 @@ from django.shortcuts import get_object_or_404, render
 
 from .forms import ProfileForm, AvatarForm, UserProjectFormSet, MainSkillForm, OtherSkillFormSet, OtherSkillFormList
 from .models import User, MainSkill, OtherSkill, UserProject
+from projects.models import Project, Position, Applicant
 
 
-@login_required
 def profile_all(request):
-    return render(request, 'accounts/index.html')
+    positions = Position.objects.all()
+    projects = Project.objects.all()
+    return render(request, 'accounts/index.html', {
+        'positions': positions,
+        'projects': projects,
+    })
 
 
 @login_required
