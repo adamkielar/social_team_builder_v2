@@ -4,14 +4,14 @@ Content-Transfer-Encoding: 7bit
 Subject: [example.com] Please Confirm Your E-mail Address
 From: webmaster@localhost
 To: adam@test.pl
-Date: Thu, 16 Apr 2020 08:01:57 -0000
-Message-ID: <158702411718.63.11843579073714273270@dc0078115d6b>
+Date: Tue, 21 Apr 2020 15:22:05 -0000
+Message-ID: <158748252536.62896.11228853750565330343@iMac-Adam.local>
 
 Hello from example.com!
 
-You're receiving this e-mail because user adam@test.pl has given yours as an e-mail address to connect their account.
+You're receiving this e-mail because user  has given yours as an e-mail address to connect their account.
 
-To confirm this is correct, go to http://0.0.0.0:8001/accounts/confirm-email/MQ:1jOzTB:3MA6MYumMUNIiRP99FGgl1TsWTw/
+To confirm this is correct, go to http://0.0.0.0:8001/accounts/confirm-email/MQ:1jQuir:mR6Z7Vzm4B-8RBzb1deXeZnulwo/
 
 Thank you from example.com!
 example.com

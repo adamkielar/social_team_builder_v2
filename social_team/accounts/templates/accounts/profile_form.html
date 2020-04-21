@@ -74,31 +74,44 @@
               {{ avatar_form }}
           </div>
       </div>
-
-      <div class="circle--secondary--module">
       <br>
-        {{ mainskill_form }}
+      <div class="circle--secondary--module">
+        <label>My Main Skills</label>
+        {{ mainskill_form.main_skills }}
       </div>
 
       <div class="circle--secondary--module">
-        <h4>Other Skills</h4>
-        <ul class="circle--clone--list">
+      <label>Additional skills</label>
+        {{ otherskill_list_form.other_skills }}
+      </div>
+
+      {{ otherskill_formset.management_form }}
+      {% for form in otherskill_formset %}
+      <div class="circle--secondary--module">
+      <label>Add new skill</label>
+      <ul class="circle--clone--list">
           <li>
+            {{ form.name }}
+            <a class="circle--clone--add">Add Skill</a>
+            <a class="circle--clone--remove">Remove</a>
           </li>
         </ul>
       </div>
-
+      {% endfor %}
+      {{ userproject_formset.management_form }}
+      {% for project in userproject_formset %}
       <div class="circle--secondary--module">
-        <h4>My Projects</h4>
+        <label>My Projects</label>
         <ul class="circle--clone--list">
           <li>
-            <input type="text" placeholder="Project Name" />
-            <input type="text" placeholder="Project URL" />
+            {{ project.project_name }}
+            {{ project.url }}
             <a class="circle--clone--add">Add Project</a>
             <a class="circle--clone--remove">Remove</a>
           </li>
         </ul>
       </div>
+      {% endfor %}
     </div>
   </form>
   {{ form.errors }}
@@ -106,4 +119,6 @@
 {% endblock body_content %}
 {% block js %}
 {{ avatar_form.media }}
+{{ mainskill_form.media }}
+{{ otherskill_list_form.media }}
 {% endblock js %}

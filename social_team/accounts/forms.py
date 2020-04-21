@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import formset_factory
 
 from . import models
 
@@ -36,7 +35,17 @@ class AvatarForm(forms.ModelForm):
 class UserProjectForm(forms.ModelForm):
     class Meta:
         model = models.UserProject
-        fields = ['project_name', 'url']
+        fields = ('project_name', 'url')
+        widgets = {
+            'project_name': forms.TextInput(attrs={
+                'placeholder': 'Enter Project Name'
+                }
+            ),
+            'url': forms.TextInput(attrs={
+                'placeholder': 'Enter Project Url'
+                }
+            )
+        }
 
 
 class MainSkillForm(forms.ModelForm):
@@ -45,18 +54,37 @@ class MainSkillForm(forms.ModelForm):
     )
     class Meta:
         model = models.User
-        fields = ['main_skills']
+        fields = ('main_skills', )
 
-    def clean_main_skill(self):
-        data = self.cleaned_data['main_skill']
+    def clean_main_skills(self):
+        data = self.cleaned_data['main_skills']
         if not data:
             raise forms.ValidationError("Please add at least one item to Skills")
         return data
 
 
-class OtherSkillForm(forms.ModelForm):
+class OtherSkillFormList(forms.ModelForm):
+    other_skills = forms.ModelMultipleChoiceField(
+        queryset=models.OtherSkill.objects.all()
+    )
     class Meta:
-        model = models.OtherSkill
-        fields = ['name']
+        model = models.User
+        fields = ['other_skills']
+
+    def clean_other_skills(self):
+        data = self.cleaned_data['other_skills']
+        return data
+
+class OtherSkillForm(forms.Form):
+    name = forms.CharField(
+        label='Add new skill',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter Your New Skill'
+        })
+    )
+
+OtherSkillFormSet = forms.formset_factory(OtherSkillForm, extra=1)
+
+UserProjectFormSet = forms.modelformset_factory(models.UserProject, form=UserProjectForm)
 
 

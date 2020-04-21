@@ -24,3 +24,5 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.MainSkill)
+admin.site.register(models.OtherSkill)
+admin.site.register(models.UserProject)
