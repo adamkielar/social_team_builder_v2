@@ -31,3 +31,9 @@ Docker: a) docker build . b) docker-compose build c) docker-compose up d) to acc
 Virtualenv: a) python3 -m venv env b) source ./env/bin/activate c) pip install --upgrade pip && pip install -r requirements.txt d) python manage.py migrate e) python pugorugh/scripts/data_import.py #load sample data f) python manage.py runserver 0.0.0.0:8001 ( importent to use 8001 port so alluth package will work)
 
 Sample data: User need to add Main Skills and Other Skills (in django admin for example) to create User Profile
+
+Migrations:
+
+1. python manage.py makemigrations accounts 
+2. python manage.py makemigrations projects 
+3. python manage.py migrate 

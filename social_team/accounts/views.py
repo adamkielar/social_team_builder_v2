@@ -33,9 +33,9 @@ def profile_edit(request, pk):
     avatar_from = AvatarForm(instance=request.user)
     mainskill_form = MainSkillForm(instance=request.user)
     otherskill_list_form = OtherSkillFormList(instance=request.user)
-    otherskill_formset = OtherSkillFormSet()
+    otherskill_formset = OtherSkillFormSet(prefix='otherskill')
     userproject_formset = UserProjectFormSet(
-        queryset=UserProject.objects.filter(user=user))
+        queryset=UserProject.objects.filter(user=user), prefix='userproject')
 
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, instance=request.user)
@@ -45,9 +45,9 @@ def profile_edit(request, pk):
         mainskill_form = MainSkillForm(request.POST, instance=request.user)
         otherskill_list_form = OtherSkillFormList(request.POST,
                                                   instance=request.user)
-        otherskill_formset = OtherSkillFormSet(request.POST)
+        otherskill_formset = OtherSkillFormSet(request.POST, prefix='otherskill')
         userproject_formset = UserProjectFormSet(
-            request.POST, queryset=UserProject.objects.filter(user=user))
+            request.POST, queryset=UserProject.objects.filter(user=user), prefix='userproject')
         if profile_form.is_valid() and avatar_from.is_valid(
         ) and mainskill_form.is_valid() and otherskill_list_form.is_valid(
         ) and otherskill_formset.is_valid() and userproject_formset.is_valid():

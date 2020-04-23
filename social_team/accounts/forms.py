@@ -88,10 +88,7 @@ OtherSkillFormSet = forms.formset_factory(OtherSkillForm, extra=1)
 UserProjectFormSet = forms.modelformset_factory(
     models.UserProject, 
     form=UserProjectForm,
-    can_delete=True,
     extra=1,
-    max_num=3,
-    can_order=True,
     )
 
 
