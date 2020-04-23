@@ -14,7 +14,7 @@ from projects.models import Project, Position, Applicant
 @login_required
 def profile_detail(request, pk):
     profile = get_object_or_404(User, pk=pk)
-    user_projects = UserProject.objects.filter(pk=request.user)
+    user_projects = UserProject.objects.filter(pk=request.user.id)
     projects = Project.objects.filter(owner=request.user)
 
     return render(request, 'accounts/profile.html', {
