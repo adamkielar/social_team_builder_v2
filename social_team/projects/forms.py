@@ -35,11 +35,16 @@ class PositionForm(forms.ModelForm):
             'description',
             'main_skills',
             'other_skills',
+            'timeline',
             'position_status',
         )
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Position Title'
+                }
+            ),
+            'timeline': forms.TextInput(attrs={
+                'placeholder': 'Contract Length'
                 }
             ),
         }

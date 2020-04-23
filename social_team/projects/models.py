@@ -32,7 +32,7 @@ class Project(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return (self.title, self.project_timeline)
+        return self.title
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -51,7 +51,8 @@ class Position(models.Model):
     position_status = models.CharField(max_length=255,
                                        choices=POSITION_STATUS,
                                        blank=True)
-    slug = models.SlugField(allow_unicode=True, unique=True)
+    slug = models.SlugField(editable=False, blank=True)
+    timeline = models.CharField(max_length=60, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -61,7 +62,7 @@ class Position(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        self.slug = slugify(self.title, allow_unicode=True)
         super().save(*args, **kwargs)
 
 
@@ -82,5 +83,5 @@ class Applicant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        #unique_together = ['user', 'position']
+        unique_together = ['user_profile', 'position']
         ordering = ['-created_at']

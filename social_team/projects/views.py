@@ -61,15 +61,14 @@ def project_new(request):
             project.project_status = 'OPEN'
             project = project.save()
 
-            for form in position_formset:
-                position = form.save(commit=False)
+            for position in position_formset:
+                position = position.save(commit=False)
                 position.project = project
                 position.status = 'APPLY'
                 position.save()
-            position_formset.save_m2m()
 
             messages.success(request, "Project created !")
-            return HttpResponseRedirect(reverse('accounts:profile_all'))
+            return HttpResponseRedirect(reverse('projects:projects_all'))
     return render(request, 'projects/project_new.html', {
         'project_form': project_form,
         'position_formset': position_formset

@@ -43,24 +43,20 @@
             <th class="circle--cell--right">Project Needs</th>
           </tr>
         </thead>
+
         <tbody>
+          {% for job in applicant %}
           <tr class="clickable-row" data-href="project.html">
             <td>
-              <h3>Invoice Delivery Tool</h3>
+              <h3>{{ job.project }}</h3>
             </td>
             <td class="circle--cell--right">
-              <span class="secondary-label">Rails Developer</span>
+              <span class="secondary-label">{{ job.position }}</span>
             </td>
           </tr>
-          <tr class="clickable-row" data-href="project.html">
-            <td>
-              <h3>Twitter Client</h3>
-            </td>
-            <td class="circle--cell--right">
-              <span class="secondary-label">Designer</span>
-            </td>
-          </tr>
+        {% endfor %}
         </tbody>
+
       </table>
     </div>
 
@@ -83,32 +79,32 @@
       </div>
 
       {{ otherskill_formset.management_form }}
-      {% for form in otherskill_formset %}
       <div class="circle--secondary--module">
       <label>Add new skill</label>
       <ul class="circle--clone--list">
+      {% for form in otherskill_formset %}
           <li>
             {{ form.name }}
             <a class="circle--clone--add">Add Skill</a>
             <a class="circle--clone--remove">Remove</a>
           </li>
+        {% endfor %}
         </ul>
       </div>
-      {% endfor %}
       {{ userproject_formset.management_form }}
-      {% for project in userproject_formset %}
       <div class="circle--secondary--module">
         <label>My Projects</label>
         <ul class="circle--clone--list">
+        {% for project in userproject_formset %}
           <li>
             {{ project.project_name }}
             {{ project.url }}
             <a class="circle--clone--add">Add Project</a>
             <a class="circle--clone--remove">Remove</a>
           </li>
+          {% endfor %}
         </ul>
       </div>
-      {% endfor %}
     </div>
   </form>
   {{ form.errors }}
