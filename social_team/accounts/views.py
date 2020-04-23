@@ -11,19 +11,11 @@ from .models import User, MainSkill, OtherSkill, UserProject
 from projects.models import Project, Position, Applicant
 
 
-def profile_all(request):
-    positions = Position.objects.all()
-    projects = Project.objects.all()
-    return render(request, 'accounts/index.html', {
-        'positions': positions,
-        'projects': projects,
-    })
-
-
 @login_required
 def profile_detail(request, pk):
     profile = get_object_or_404(User, pk=pk)
     user_projects = UserProject.objects.all().filter(pk=request.user.id)
+    
     return render(request, 'accounts/profile.html', {
         'profile': profile,
         'user_projects': user_projects

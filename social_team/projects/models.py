@@ -20,8 +20,8 @@ class Project(models.Model):
                               related_name='projects')
     title = models.CharField(max_length=255, unique=True)
     description = MarkdownxField(max_length=2500, default='')
-    project_timeline = models.TextField(default='')
-    applicant_requirements = models.TextField(max_length=2500, default='')
+    project_timeline = MarkdownxField(max_length=500, default='')
+    applicant_requirements = MarkdownxField(max_length=500, default='')
     project_status = models.CharField(max_length=255,
                                       choices=PROJECT_STATUS,
                                       blank=True)
@@ -32,7 +32,7 @@ class Project(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return self.title
+        return (self.title, self.project_timeline)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
