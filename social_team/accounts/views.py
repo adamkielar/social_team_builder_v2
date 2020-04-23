@@ -14,7 +14,7 @@ from projects.models import Project, Position, Applicant
 @login_required
 def profile_detail(request, pk):
     profile = get_object_or_404(User, pk=pk)
-    user_projects = UserProject.objects.filter(pk=request.user.id)
+    user_projects = UserProject.objects.filter(user=request.user)
     projects = Project.objects.filter(owner=request.user)
 
     return render(request, 'accounts/profile.html', {
@@ -68,7 +68,7 @@ def profile_edit(request, pk):
             messages.success(request, "Profile updated !")
             return HttpResponseRedirect(
                 reverse('accounts:profile_detail',
-                        kwargs={'pk': request.user.pk}))
+                        kwargs={'pk': request.user.id}))
 
     return render(
         request,
