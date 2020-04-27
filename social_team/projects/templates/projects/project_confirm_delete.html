@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_content %}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100 grid-push-30">
+        <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+            <p>Are you sure you want to delete {{object}} ?!</p>
+        <input type="submit" class="button button-danger icon-on-left" value="Delete">
+        <a class="button button-text" href="{% url 'projects:projects_all' %}">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock body_content %}

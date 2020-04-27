@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'cropperjs',
+    'django_filters',
     'markdownx',
     'accounts',
     'projects',
@@ -156,8 +157,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend')
 
 SITE_ID = 1
-SITE_NAME = 'Social Team'
-SITE_DOMAIN = 'socialteam.test'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None

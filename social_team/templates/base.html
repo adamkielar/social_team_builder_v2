@@ -27,9 +27,9 @@
 
   <!-- JS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript" src="{% static '/js/autogrow.js' %}"></script>
-<script type="text/javascript" src="{% static '/js/global.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js" integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static '/js/autogrow.js' %}"></script>
+  <script type="text/javascript" src="{% static '/js/global.js' %}"></script>
 </head>
 <body>
   <header class="circle--header">
@@ -42,7 +42,7 @@
           <div class="circle--search">
           <form class="" action="{% url 'projects:projects_search' %}" method="GET">
             {% csrf_token %}
-            <input type="search" name="q" placeholder="Search Projects..." />
+            {{ search_form.q }}
             <button type="submit">
               <svg version="1.1" class="search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" xml:space="preserve">
                 <path d="M12,10.6L8.3,6.9C8.7,6.2,9,5.4,9,4.5C9,2,7,0,4.5,0S0,2,0,4.5S2,9,4.5,9c0.9,0,1.7-0.3,2.4-0.7l3.7,3.7L12,10.6z M2,4.5

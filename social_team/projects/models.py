@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.text import slugify
 
 from markdownx.models import MarkdownxField
@@ -37,6 +38,10 @@ class Project(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse_lazy('projects:project_detail', kwargs={'slug': self.slug})
+
 
 
 class Position(models.Model):

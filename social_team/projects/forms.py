@@ -4,6 +4,16 @@ from .models import Project, Position, Applicant
 from accounts.models import MainSkill, OtherSkill
 
 
+class SearchForm(forms.Form):
+    q = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Search Projects...',
+            },
+        ))
+
+
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
@@ -17,9 +27,10 @@ class ProjectForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Project Title'
-                }
+            }
             )
         }
+
 
 class PositionForm(forms.ModelForm):
     main_skills = forms.ModelMultipleChoiceField(
@@ -28,9 +39,11 @@ class PositionForm(forms.ModelForm):
     other_skills = forms.ModelMultipleChoiceField(
         queryset=OtherSkill.objects.all()
     )
+
     class Meta:
         model = Position
         fields = (
+            'id',
             'title',
             'description',
             'main_skills',
@@ -41,12 +54,30 @@ class PositionForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Position Title'
-                }
+            }
             ),
             'timeline': forms.TextInput(attrs={
                 'placeholder': 'Contract Length'
-                }
+            }
             ),
+            'id': forms.HiddenInput(),
         }
 
-PositionFormSet = forms.modelformset_factory(Position, form=PositionForm)
+
+PositionFormSet = forms.inlineformset_factory(
+    Project,
+    Position,
+    form=PositionForm,
+    fields=(
+        'id',
+        'title',
+        'description',
+        'main_skills',
+        'other_skills',
+        'timeline',
+        'position_status',
+    ),
+    extra=1,
+    max_num=1,
+    can_delete=True
+)

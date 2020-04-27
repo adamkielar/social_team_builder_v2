@@ -26,24 +26,10 @@
         <h2>Positions</h2>
 
         <ul class="circle--group--list circle--clone--list">
-        {{ position_formset.management_form }}
-        {% for position in position_formset %}
           <li>
           <h3>Position Title</h3>
-            {{ position.id }}
-            {{ position.title }}
-            <h3>Position Description</h3>
-            {{ position.description }}
-            <h3>Position Main Skills Required</h3>
-            {{ position.main_skills }}
-            <h3>Position Other Skills Required</h3>
-            {{ position.other_skills }}
-            <h3>Contract Time</h3>
-            {{ position.timeline }}
-            <a class="circle--clone--add">Add Position</a>
-            <a class="circle--clone--remove">Remove</a>
+            {{ position_formset }}
           </li>
-          {% endfor %}
         </ul>
         <input type="submit" class="button button-primary icon-on-left" value="Save Changes">
 

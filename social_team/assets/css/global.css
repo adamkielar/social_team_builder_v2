@@ -1602,7 +1602,12 @@ li:only-child .circle--clone--remove {
 }
 /* line 4, ../sass/circle/components/forms.sass */
 .circle--search input {
+  width: 100%;
   margin: 0;
+}
+.circle--search form {
+  width: 100%;
+  margin-bottom: 0rem;
 }
 /* line 6, ../sass/circle/components/forms.sass */
 .circle--search button {
@@ -2103,4 +2108,8 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
 /* line 13, ../sass/global.sass */
 .logo:hover {
   box-shadow: 0 0 0 15px #fff inset;
+}
+
+form.search {
+    margin-bottom: 0rem;
 }

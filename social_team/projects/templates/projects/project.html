@@ -7,7 +7,7 @@
       <div class="grid-100">
       {% if user.is_authenticated and user == project.owner %}
         <a class="button" href="{% url 'projects:project_edit' slug=project.slug %}">Edit Project</a>
-        <a class="button button-text" href="index.html">Delete Project</a>
+        <a class="button button-text" href="{% url 'projects:project_delete' slug=project.slug %}">Delete Project</a>
         {% endif %}
       </div>
     </div>

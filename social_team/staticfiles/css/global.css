@@ -1045,11 +1045,10 @@ input[type="email"]:focus, input[type="number"]:focus, input[type="search"]:focu
 
 /* line 51, ../sass/circle/core/forms.sass */
 select {
-  height: 50px;
+  height: auto;
   padding: 15px;
   color: #222;
   font-weight: bold;
-  -webkit-appearance: menulist;
   -moz-appearance: menulist;
   appearance: menulist;
 }

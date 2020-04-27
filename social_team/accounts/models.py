@@ -9,8 +9,10 @@ from django.urls import reverse
 from cropperjs.models import CropperImageField
 from markdownx.models import MarkdownxField
 
+
 class UserManager(BaseUserManager):
     """Create and save new user"""
+
     def create_user(self, email, password=None):
         if not email:
             raise ValueError("User must have email address")
@@ -35,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username"""
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     full_name = models.CharField(max_length=255, blank=False, default='')
-    avatar = CropperImageField(dimensions=(240, 240), default='avatars/sample.png', upload_to='avatars/')
+    avatar = CropperImageField(dimensions=(240, 240), linked=True, default='avatars/sample.png', upload_to='avatars/')
     bio = MarkdownxField()
     date_joined = models.DateTimeField(auto_now_add=True)
     main_skills = models.ManyToManyField('MainSkill', related_name='mainskills')
@@ -77,4 +79,3 @@ class UserProject(models.Model):
 
     def __str__(self):
         return self.project_name
-

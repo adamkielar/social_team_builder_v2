@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
 {% block body_content %}
   <div class="circle--actions--bar">
     <nav class="bounds">
@@ -12,7 +13,7 @@
   </div>
 
   <div class="bounds circle--page">
-  <form method="post" action="" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="circle--page--header circle--fluid">
       <div class="circle--fluid--cell circle--fluid--primary">
@@ -25,13 +26,13 @@
 
     <div class="grid-70">
       <div class="circle--input--h1">
-      {{ profile_form.full_name.label}}
-      {{ profile_form.full_name }}
+      {{ form.full_name.label|title}}
+      {{ form.full_name }}
       </div>
       <div class="circle--article--body">
         <div class="circle--input--h1">
-        {{ profile_form.bio.label }}
-        {{ profile_form.bio }}
+        {{ form.bio.label }}
+        {{ form.bio }}
         </div>
       </div>
 
@@ -45,16 +46,18 @@
         </thead>
 
         <tbody>
-          {% for job in applicant %}
-          <tr class="clickable-row" data-href="project.html">
+          {% for project in projects %}
+          <tr class="clickable-row" data-href="{% url 'projects:project_detail' slug=project.slug %}">
             <td>
-              <h3>{{ job.project }}</h3>
+              <h3>{{ project.title|title }}</h3>
             </td>
             <td class="circle--cell--right">
-              <span class="secondary-label">{{ job.position }}</span>
+            {% for position in project.position_set.all %}
+              <span class="secondary-label">{{ position.title }}</span>
+              {% endfor %}
             </td>
           </tr>
-        {% endfor %}
+          {% endfor %}
         </tbody>
 
       </table>
@@ -62,12 +65,8 @@
 
     <div class="grid-25 grid-push-5">
 
-      <div class="">
-            <div class="">
-              {{ avatar_form }}
-          </div>
-      </div>
-      <br>
+      {{ form.avatar }}
+
       <div class="circle--secondary--module">
         <label>My Main Skills</label>
         {{ mainskill_form.main_skills }}
@@ -78,31 +77,20 @@
         {{ otherskill_list_form.other_skills }}
       </div>
 
-      {{ otherskill_formset.management_form }}
       <div class="circle--secondary--module">
       <label>Add new skill</label>
       <ul class="circle--clone--list">
-      {% for form in otherskill_formset %}
           <li>
-            {{ form.name }}
-            <a class="circle--clone--add">Add Skill</a>
-            <a class="circle--clone--remove">Remove</a>
+            {{ otherskill_formset }}
           </li>
-        {% endfor %}
         </ul>
       </div>
-      {{ userproject_formset.management_form }}
       <div class="circle--secondary--module">
         <label>My Projects</label>
         <ul class="circle--clone--list">
-        {% for project in userproject_formset %}
           <li>
-            {{ project.project_name }}
-            {{ project.url }}
-            <a class="circle--clone--add">Add Project</a>
-            <a class="circle--clone--remove">Remove</a>
+            {{ userproject_formset }}
           </li>
-          {% endfor %}
         </ul>
       </div>
     </div>
@@ -111,7 +99,5 @@
   </div>
 {% endblock body_content %}
 {% block js %}
-{{ avatar_form.media }}
-{{ mainskill_form.media }}
-{{ otherskill_list_form.media }}
+{{ form.media }}
 {% endblock js %}
