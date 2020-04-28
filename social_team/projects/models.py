@@ -5,7 +5,6 @@ from django.utils.text import slugify
 
 from markdownx.models import MarkdownxField
 
-
 PROJECT_STATUS = (('OPEN', 'Open'), ('CLOSED', 'Closed'))
 
 POSITION_STATUS = (('APPLY', 'Apply'), ('FILLED', 'Filled'))
@@ -43,16 +42,15 @@ class Project(models.Model):
         return reverse_lazy('projects:project_detail', kwargs={'slug': self.slug})
 
 
-
 class Position(models.Model):
     """Model for project positions to apply"""
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     description = MarkdownxField(default='')
     main_skills = models.ManyToManyField('accounts.MainSkill',
-                                        related_name='positions_main')
+                                         related_name='positions_main')
     other_skills = models.ManyToManyField('accounts.OtherSkill',
-                                         related_name='positions_other')
+                                          related_name='positions_other')
     position_status = models.CharField(max_length=255,
                                        choices=POSITION_STATUS,
                                        blank=True)

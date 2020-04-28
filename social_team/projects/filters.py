@@ -1,7 +1,7 @@
 import django_filters
 from django.db.models import Q
 
-from projects.models import Project, Position, POSITION_STATUS
+from projects.models import Project, Position, Applicant, POSITION_STATUS
 
 
 class PositionStatusFilter(django_filters.FilterSet):
@@ -13,9 +13,12 @@ class PositionStatusFilter(django_filters.FilterSet):
 
 
 class ProjectsFilter(django_filters.FilterSet):
-
     class Meta:
         model = Project
         fields = ['project_status']
 
 
+class ApplicantsFilter(django_filters.FilterSet):
+    class Meta:
+        model = Applicant
+        fields = ['applicant_status']

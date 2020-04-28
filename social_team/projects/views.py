@@ -1,15 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from django.http import Http404
+from django.db import IntegrityError
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, RedirectView
 
 from accounts.models import User, UserProject, MainSkill
 from projects.models import Project, Position, Applicant
 from projects.forms import SearchForm, ProjectForm, PositionForm, PositionFormSet
-from projects.filters import PositionStatusFilter, ProjectsFilter
+from projects.filters import ApplicantsFilter, PositionStatusFilter, ProjectsFilter
 
 
 class SearchView(ListView):
@@ -204,4 +205,51 @@ class ApplicantList(LoginRequiredMixin, ListView):
             context['search_form'] = self.search_form_class()
             context['user'] = get_object_or_404(User, pk=self.request.user.id)
             context['projects'] = Project.objects.filter(owner=self.request.user)
+            context['positions'] = Position.objects.all()
+            context['applicants_filter'] = ApplicantsFilter(self.request.GET, queryset=Applicant.objects.all())
         return context
+
+
+class ApplicantCreate(LoginRequiredMixin, RedirectView):
+    success_message = 'You applied for position successfully !'
+    warning_message = 'You already applied for that position !'
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('projects:projects_all')
+
+    def get(self, request, *args, **kwargs):
+        position = get_object_or_404(Position, pk=self.kwargs.get('pk'))
+        project = get_object_or_404(Project, id=position.project.id)
+        try:
+            Applicant.objects.create(
+                user_profile=self.request.user,
+                project=project,
+                position=position,
+                applicant_status='UNDECIDED'
+            )
+        except IntegrityError:
+            messages.warning(self.request, self.warning_message)
+        
+        else:
+            messages.success(self.request, self.success_message)
+            position.position_status = 'FILLED'
+            position.save()
+        return super(ApplicantCreate, self).get(request, *args, **kwargs)
+
+'''
+    def post(self, request, *args, **kwargs):
+        if 'apply' in request.POST:
+            print(request.POST)
+            position_pk = self.request.GET.get('id')
+            print(position_pk)
+            position = Position.objects.get(id=position_pk)
+            Applicant.objects.create(
+                user_profile=self.request.user,
+                project=self.get_object(),
+                position=position,
+                applicant_status='UNDECIDED'
+            )
+            position.position_status.set('FILLED')
+            messages.success(self.request, self.success_message)
+            return HttpResponseRedirect('projects:project_detail', kwargs={'slug': self.get.object().slug})
+'''
