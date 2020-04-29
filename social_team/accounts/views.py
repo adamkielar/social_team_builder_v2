@@ -24,6 +24,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
         context['search_form'] = SearchForm()
         context['user_projects'] = UserProject.objects.filter(user=self.request.user)
         context['projects'] = Project.objects.filter(owner=self.request.user)
+        context['applicants'] = Applicant.objects.filter(user_profile=self.request.user)
         return context
 
 

@@ -16,7 +16,7 @@
       <h2>Applications</h2>
     </div>
 
-    <div class="grid-25">
+    <div class="grid-15">
       <div class="circle--filter circle--secondary--module">
         <h4>My Projects</h4>
         <ul class="circle--filter--list">
@@ -40,7 +40,7 @@
 
     </div>
 
-    <div class="grid-70 grid-push-5">
+    <div class="grid-80 grid-push-5">
       {% if applicants_filter %}
        <form method="GET" class="form-label-group-2">
          {% csrf_token %}
@@ -55,7 +55,8 @@
           <tr>
             <th>Applicant</th>
             <th class="circle--cell--right">Applicant Position</th>
-            <th class="circle--cell--right">Applicant Decision</th>
+            <th class="circle--cell--right">Action</th>
+            <th class="circle--cell--right">Decision</th>
           </tr>
         </thead>
         <tbody>
@@ -69,7 +70,14 @@
               <span class="secondary-label">{{ applicant.position.title }}</span>
             </td>
             <td class="circle--cell--right">
-              <span class="secondary-label">Action</span>
+              <form method="POST" action="{% url 'projects:apply_status' position_pk=applicant.position.id applicant_pk=applicant.id %}">
+              {% csrf_token %}
+              <button class="button button-primary btn-sm" type="submit" value="{{ applicant.id }}" name="approve">Approve</button>
+                <button class="button button-danger btn-sm" type="submit" value="{{ applicant.id }}" name="reject">Reject</button>
+            </form>
+            </td>
+            <td class="circle--cell--right">
+              <h3>{{ applicant.applicant_status }}</h3>
             </td>
           </tr>
         {% endfor %}

@@ -28,7 +28,33 @@
       <h3>{{ user.bio.label|title }}</h3>
         <p>{{ user.bio }}</p>
       </div>
-
+      <h2>You applied for following Positions</h2>
+            <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Applicant</th>
+            <th class="circle--cell--right">Applicant Position</th>
+            <th class="circle--cell--right">Project Owner Decision</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for applicant in applicants %}
+          <tr class="clickable-row" data-href="{% url 'projects:project_detail' slug=applicant.project.slug %}">
+            <td>
+              <h3>{{ applicant.user_profile.full_name}}</h3>
+              <p>{{ applicant.project.title }}</p>
+            </td>
+            <td class="circle--cell--right">
+              <p>{{ applicant.position.title }}</p>
+            </td>
+            <td class="circle--cell--right">
+              <h3>{{ applicant.applicant_status }}</h3>
+            </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
       <h2>Past Projects</h2>
       <table class="u-full-width circle--table">
         <thead>

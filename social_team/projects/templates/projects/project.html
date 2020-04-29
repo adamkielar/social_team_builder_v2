@@ -33,7 +33,7 @@
           <li>
             <h3>{{position.title }}</h3>
             <p>{{ position.description }}</p>
-            {% if position.position_status == 'APPLY' %}
+            {% if position != applicants.position %}
             <form method="POST" action="{% url 'projects:apply' pk=position.id %}">
               {% csrf_token %}
               <button class="button button-primary" type="submit" value="{{ position.id }}" name="apply">Apply</button>

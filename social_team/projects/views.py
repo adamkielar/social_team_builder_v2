@@ -113,6 +113,7 @@ class ProjectDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         context['search_form'] = SearchForm()
+        context['applicants'] = get_object_or_404(Applicant, project=self.get_object(), user_profile=self.request.user)
         return context
 
 
@@ -212,6 +213,7 @@ class ApplicantList(LoginRequiredMixin, ListView):
 
 
 class ApplicantCreate(LoginRequiredMixin, RedirectView):
+    """View to create Applicant object after apply for position"""
     success_message = 'You applied for position successfully !'
     warning_message = 'You already applied for that position !'
 
@@ -219,13 +221,13 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
         return reverse('projects:projects_all')
 
     def get(self, request, *args, **kwargs):
-        position = get_object_or_404(Position, pk=self.kwargs.get('pk'))
-        project = get_object_or_404(Project, id=position.project.id)
+        self.position = get_object_or_404(Position, pk=self.kwargs.get('pk'))
+        self.project = get_object_or_404(Project, id=self.position.project.id)
         try:
             Applicant.objects.create(
                 user_profile=self.request.user,
-                project=project,
-                position=position,
+                project=self.project,
+                position=self.position,
                 applicant_status='UNDECIDED'
             )
         except IntegrityError:
@@ -233,14 +235,62 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
         
         else:
             messages.success(self.request, self.success_message)
-            position.position_status = 'FILLED'
-            position.save()
-            self.applicant = get_object_or_404(Applicant, position=position)
+            self.applicant = get_object_or_404(Applicant, position=self.position)
             send_mail(
-                'Application for ' + project.title,
-                'You applied for ' + position.title + ' position in ' + project.title + ' project!',
+                'Application for ' + self.project.title,
+                'You applied for ' + self.position.title + ' position in ' + self.project.title + ' project!',
                 self.request.user.email,
                 [self.applicant.user_profile.email],
                 fail_silently=False,
             )
         return super(ApplicantCreate, self).get(request, *args, **kwargs)
+
+
+class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
+    """View to change Applicant status and send email about decision"""
+    success_message = 'You changed applicant status successfully !'
+
+    def test_func(self):
+        self.position = get_object_or_404(Position, pk=self.kwargs.get('position_pk'))
+        self.project = get_object_or_404(Project, id=self.position.project.id)
+        self.applicant = get_object_or_404(Applicant, pk=self.kwargs.get('applicant_pk'))
+        owner = self.project.owner
+        user = self.request.user
+        if owner == user:
+            return True
+        else:
+            if user.is_authenticated():
+                raise Http404("You can not change applicant status. You are not the owner of this project !")
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('projects:applications')
+
+    def get(self, request, *args, **kwargs):
+        if request.POST.get('approve'):
+            self.applicant.applicant_status = 'APPROVED'
+            self.applicant.save()
+            self.position.position_status = 'FILLED'
+            self.position.save()
+            messages.success(self.request, self.success_message)
+
+            send_mail(
+                'You are Accepted',
+                'You are accepted for ' + self.position.title + ' position in ' + self.project.title + ' project!',
+                self.request.user.email,
+                [self.applicant.user_profile.email],
+                fail_silently=False,
+            )
+
+        if request.POST.get('reject'):
+            self.applicant.applicant_status = 'REJECTED'
+            self.applicant.save()
+            messages.success(self.request, self.success_message)
+
+            send_mail(
+                'You are not accepted',
+                'You are not accepted for ' + self.position.title + ' position in ' + self.project.title + ' project!',
+                self.request.user.email,
+                [self.applicant.user_profile.email],
+                fail_silently=False,
+            )
+        return super(ApplicantStatus, self).get(request, *args, **kwargs)
