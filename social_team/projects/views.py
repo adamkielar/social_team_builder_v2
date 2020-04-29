@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.db import IntegrityError
 from django.http import Http404, HttpResponseRedirect
@@ -234,22 +235,12 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
             messages.success(self.request, self.success_message)
             position.position_status = 'FILLED'
             position.save()
-        return super(ApplicantCreate, self).get(request, *args, **kwargs)
-
-'''
-    def post(self, request, *args, **kwargs):
-        if 'apply' in request.POST:
-            print(request.POST)
-            position_pk = self.request.GET.get('id')
-            print(position_pk)
-            position = Position.objects.get(id=position_pk)
-            Applicant.objects.create(
-                user_profile=self.request.user,
-                project=self.get_object(),
-                position=position,
-                applicant_status='UNDECIDED'
+            self.applicant = get_object_or_404(Applicant, position=position)
+            send_mail(
+                'Application for ' + project.title,
+                'You applied for ' + position.title + ' position in ' + project.title + ' project!',
+                self.request.user.email,
+                [self.applicant.user_profile.email],
+                fail_silently=False,
             )
-            position.position_status.set('FILLED')
-            messages.success(self.request, self.success_message)
-            return HttpResponseRedirect('projects:project_detail', kwargs={'slug': self.get.object().slug})
-'''
+        return super(ApplicantCreate, self).get(request, *args, **kwargs)
