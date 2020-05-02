@@ -63,6 +63,9 @@ class MainSkill(models.Model):
 
 class OtherSkill(models.Model):
     """Model for user own skills"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name='user_skills')
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):

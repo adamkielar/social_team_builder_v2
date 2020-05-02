@@ -67,8 +67,6 @@ class ProfilesModelTest(TestCase):
         self.assertEqual(user.bio, 'I am Jason Bourne')
         self.assertEqual(user.main_skills.count(), 1)
         self.assertEqual(user.other_skills.count(), 1)
-        self.assertEqual(user.is_active, True)
-        self.assertEqual(user.is_staff, False)
 
     def test_main_skill_creation(self):
         """Test create main skill"""

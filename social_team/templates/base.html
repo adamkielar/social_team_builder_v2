@@ -38,6 +38,7 @@
         <div class="circle--fluid--cell">
           <h1 class="hide-text circle--logo"><a class="logo" href="/">Circle</a></h1>
         </div>
+        {% if user.is_authenticated %}
         <div class="circle--fluid--cell circle--fluid--primary">
           <div class="circle--search">
           <form class="" action="{% url 'projects:projects_search' %}" method="GET">
@@ -52,6 +53,7 @@
             </form>
           </div>
         </div>
+        {% endif %}
         <div class="circle--fluid--cell circle--fluid--secondary">
           <nav>
             <ul class="circle--inline">

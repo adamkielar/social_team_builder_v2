@@ -78,6 +78,4 @@ PositionFormSet = forms.inlineformset_factory(
         'position_status',
     ),
     extra=1,
-    max_num=1,
-    can_delete=True
 )

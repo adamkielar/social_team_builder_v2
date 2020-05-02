@@ -16,6 +16,7 @@ POSITIONS = (
 
 
 class ProfileForm(forms.ModelForm):
+    """Form for User full_name, bio and image"""
     class Meta:
         model = models.User
         fields = ('full_name', 'bio', 'avatar')
@@ -29,6 +30,7 @@ class ProfileForm(forms.ModelForm):
 
 
 class MainSkillForm(forms.ModelForm):
+    """Form for User main skill"""
     main_skills = forms.ModelMultipleChoiceField(
         queryset=models.MainSkill.objects.all()
     )
@@ -91,7 +93,6 @@ OtherSkillFormSet = forms.modelformset_factory(
     form=OtherSkillForm,
     fields=('name', ),
     max_num=2,
-    can_delete=True,
 )
 
 UserProjectFormSet = forms.modelformset_factory(
@@ -99,5 +100,4 @@ UserProjectFormSet = forms.modelformset_factory(
     form=UserProjectForm,
     fields=('project_name', 'url'),
     max_num=2,
-    can_delete=True,
 )

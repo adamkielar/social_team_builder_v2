@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block head_title %}Create Project | {{ block.super }}{% endblock head_title %}
 {% block body_content %}
   <div class="circle--actions--bar">
     <div class="bounds">
@@ -27,7 +27,6 @@
 
         <ul class="circle--group--list circle--clone--list">
           <li>
-          <h3>Position Title</h3>
             {{ position_formset }}
           </li>
         </ul>

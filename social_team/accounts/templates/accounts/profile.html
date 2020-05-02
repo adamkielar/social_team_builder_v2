@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block head_title %}Profile Page | {{ block.super }}{% endblock head_title %}
 {% block body_content %}
   <div class="circle--actions--bar">
     <nav class="bounds">
       <ul class="circle--pill--list">
-        <li><a href="{% url 'projects:applications' %}">Applications</a></li>
+        <li><a href="{% url 'projects:applications' pk=user.id %}">Applications</a></li>
         <li><a class="selected" href="{% url 'accounts:profile_detail' pk=user.id %}">Profile</a></li>
       </ul>
     </nav>

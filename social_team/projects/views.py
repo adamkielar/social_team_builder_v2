@@ -263,7 +263,7 @@ class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
                 raise Http404("You can not change applicant status. You are not the owner of this project !")
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse('projects:applications')
+        return reverse('projects:applications', kwargs={'pk': self.request.user.id})
 
     def get(self, request, *args, **kwargs):
         if request.POST.get('approve'):
