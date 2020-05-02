@@ -40,3 +40,7 @@ d) python manage.py makemigrations accounts && python manage.py makemigrations a
 e) python manage.py runserver 0.0.0.0:8001 ( importent to use 8001 port so alluth package will work)
 
 Sample data: User need to add Main Skills and Other Skills (in django admin for example) to create User Profile
+Project includes database, sqlite, with sample data.
+Django admin:
+email: root@test.pl
+password: Testing098
