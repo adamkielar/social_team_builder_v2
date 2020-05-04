@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, UpdateView
@@ -10,10 +10,14 @@ from projects.models import Project, Position, Applicant
 from projects.forms import SearchForm
 
 
-class ProfileDetail(LoginRequiredMixin, DetailView):
+class ProfileDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     """View to display User profile"""
     model = User
     template_name = 'accounts/profile.html'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj == self.request.user
 
     def get_queryset(self):
         queryset = super(ProfileDetail, self).get_queryset()
@@ -28,7 +32,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-class ProfileUpdate(LoginRequiredMixin, UpdateView):
+class ProfileUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """View to update user profile. Profile is already created -> see models.py"""
     model = User
     form_class = ProfileForm
@@ -38,6 +42,10 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     userproject_form_class = UserProjectFormSet
     search_form_class = SearchForm
     template_name = 'accounts/profile_form.html'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj == self.request.user
 
     def get_object(self, queryset=None):
         return get_object_or_404(User, pk=self.kwargs.get('pk'))
