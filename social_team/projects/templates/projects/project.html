@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% load project_extras %}
 {% block head_title %}Project Page | {{ block.super }}{% endblock head_title %}
 {% block body_content %}
   <div class="circle--actions--bar">
@@ -33,13 +35,17 @@
           <li>
             <h3>{{position.title }}</h3>
             <p>{{ position.description }}</p>
-            {% if position != applicants.position %}
+            {% if position.position_status == 'FILLED' %}
+            <a class="button button-primary button-inactive">Position Filled</a>
+            {% endif %}
+            {% user_applied position as apply %}
+            {% if apply == True %}
+            <a class="button button-primary button-inactive">Position Filled</a>
+            {% else %}
             <form method="POST" action="{% url 'projects:apply' pk=position.id %}">
               {% csrf_token %}
               <button class="button button-primary" type="submit" value="{{ position.id }}" name="apply">Apply</button>
             </form>
-            {% else %}
-            <a class="button button-primary button-inactive">Position Filled</a>
             {% endif %}
           </li>
           {% endfor %}

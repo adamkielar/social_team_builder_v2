@@ -113,7 +113,7 @@ class ProjectDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         context['search_form'] = SearchForm()
-        context['applicants'] = get_object_or_404(Applicant, project=self.get_object(), user_profile=self.request.user)
+        #context['applicants'] = get_object_or_404(Applicant, project=self.get_object(), user_profile=self.request.user)
         return context
 
 
@@ -235,7 +235,7 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
         
         else:
             messages.success(self.request, self.success_message)
-            self.applicant = get_object_or_404(Applicant, position=self.position)
+            self.applicant = get_object_or_404(Applicant, position=self.position, user_profile=self.request.user)
             send_mail(
                 'Application for ' + self.project.title,
                 'You applied for ' + self.position.title + ' position in ' + self.project.title + ' project!',
