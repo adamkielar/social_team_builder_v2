@@ -35,11 +35,8 @@
           <li>
             <h3>{{position.title }}</h3>
             <p>{{ position.description }}</p>
-            {% if position.position_status == 'FILLED' %}
-            <a class="button button-primary button-inactive">Position Filled</a>
-            {% endif %}
             {% user_applied position as apply %}
-            {% if apply == True %}
+            {% if position.position_status == 'FILLED' or apply == True  %}
             <a class="button button-primary button-inactive">Position Filled</a>
             {% else %}
             <form method="POST" action="{% url 'projects:apply' pk=position.id %}">

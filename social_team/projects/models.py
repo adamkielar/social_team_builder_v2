@@ -19,9 +19,9 @@ class Project(models.Model):
                               on_delete=models.CASCADE,
                               related_name='projects')
     title = models.CharField(max_length=255, unique=True)
-    description = MarkdownxField(max_length=2500, default='')
-    project_timeline = MarkdownxField(max_length=500, default='')
-    applicant_requirements = MarkdownxField(max_length=500, default='')
+    description = MarkdownxField(max_length=2500, blank=True, null=True)
+    project_timeline = MarkdownxField(max_length=500, blank=True, null=True )
+    applicant_requirements = MarkdownxField(max_length=500, blank=True, null=True)
     project_status = models.CharField(max_length=255,
                                       choices=PROJECT_STATUS,
                                       blank=True)
@@ -45,8 +45,8 @@ class Project(models.Model):
 class Position(models.Model):
     """Model for project positions to apply"""
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, blank=True, default='')
-    description = MarkdownxField(default='')
+    title = models.CharField(max_length=255, blank=True)
+    description = MarkdownxField(blank=True, null=True)
     main_skills = models.ManyToManyField('accounts.MainSkill',
                                          related_name='positions_main')
     other_skills = models.ManyToManyField('accounts.OtherSkill',
@@ -55,7 +55,7 @@ class Position(models.Model):
                                        choices=POSITION_STATUS,
                                        blank=True)
     slug = models.SlugField(editable=False, blank=True)
-    timeline = models.CharField(max_length=60, blank=True)
+    timeline = models.CharField(max_length=60, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

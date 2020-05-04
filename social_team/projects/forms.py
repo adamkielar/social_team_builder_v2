@@ -34,10 +34,13 @@ class ProjectForm(forms.ModelForm):
 
 class PositionForm(forms.ModelForm):
     main_skills = forms.ModelMultipleChoiceField(
-        queryset=MainSkill.objects.all()
+        queryset=MainSkill.objects.all(),
+        widget=forms.SelectMultiple,
+        required=False,
     )
     other_skills = forms.ModelMultipleChoiceField(
-        queryset=OtherSkill.objects.all()
+        queryset=OtherSkill.objects.all(),
+        required=False,
     )
 
     class Meta:

@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>{% block head_title %}Social Team Builder{% endblock head_title %}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONTS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,500' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Cousine' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+  {% block css %}
+  {% endblock css %}
+
+  <!-- JS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js" integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static '/js/autogrow.js' %}"></script>
+  <script type="text/javascript" src="{% static '/js/global.js' %}"></script>
+</head>
+<body>
+  <header class="circle--header">
+    <div class="bounds">
+      <div class="circle--fluid">
+        <div class="circle--fluid--cell">
+          <h1 class="hide-text circle--logo"><a class="logo" href="/">Circle</a></h1>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="circle--fluid--cell circle--fluid--primary">
+          <div class="circle--search">
+          <form class="" action="{% url 'projects:projects_search' %}" method="GET">
+            {% csrf_token %}
+            {{ search_form.q }}
+            <button type="submit">
+              <svg version="1.1" class="search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" xml:space="preserve">
+                <path d="M12,10.6L8.3,6.9C8.7,6.2,9,5.4,9,4.5C9,2,7,0,4.5,0S0,2,0,4.5S2,9,4.5,9c0.9,0,1.7-0.3,2.4-0.7l3.7,3.7L12,10.6z M2,4.5
+                C2,3.1,3.1,2,4.5,2S7,3.1,7,4.5C7,5.9,5.9,7,4.5,7S2,5.9,2,4.5z"/>
+              </svg>
+            </button>
+            </form>
+          </div>
+        </div>
+        {% endif %}
+        <div class="circle--fluid--cell circle--fluid--secondary">
+          <nav>
+            <ul class="circle--inline">
+            {% if not user.is_authenticated %}
+              <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+              <li><a href="{% url 'account_login' %}">Sign In</a></li>
+              {% else %}
+              <li><a href="{% url 'accounts:profile_detail' pk=logged_user.id %}">Profile</a></li>
+              <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="grid-70 grid-push-5">
+  {% if messages %}
+			<div class="messages">
+				{% for message in messages %}
+				<div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+					<div class="container">{{ message|safe }}</div>
+				</div>
+				{% endfor %}
+			</div>
+			{% endif %}
+  </div>
+{% block body_content %}
+
+  <div class="bounds circle--page">
+    <div class="circle--page--header circle--fluid">
+      <div class="circle--fluid--cell circle--fluid--primary">
+        <h2>Profile</h2>
+      </div>
+    </div>
+
+    <div class="grid-70">
+      <h3>{{ user.full_name.label|title }}</h3>
+      <h1>{{ user.full_name|title }}</h1>
+      <div class="circle--article--body">
+      <h3>{{ user.bio.label|title }}</h3>
+        <p>{{ user.bio }}</p>
+      </div>
+      <h2>Past Projects</h2>
+      <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Project Title</th>
+            <th class="circle--cell--right">Project Needs</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+          <tr class="clickable-row" data-href="{% url 'projects:project_detail' slug=project.slug %}">
+            <td>
+              <h3>{{ project.title|title }}</h3>
+            </td>
+            <td class="circle--cell--right">
+            {% for position in project.position_set.all %}
+              <span class="secondary-label">{{ position.title }}</span>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-25 grid-push-5">
+
+      <div class="circle--secondary--module">
+          <img class="circle--primary--avatar" src="{{ user.avatar.url }}"/>
+      </div>
+
+    <div class="circle--secondary--module">
+        <h4>Main Skills</h4>
+        <ul class="circle--link--list">
+        {% for skill in user.main_skills.all %}
+          <li>
+            {{ skill }}
+          </li>
+          {% endfor %}
+        </ul>
+    </div>
+      <div class="circle--secondary--module">
+        <h4>Other Skills</h4>
+        <ul class="circle--link--list">
+        {% for skill in user.other_skills.all %}
+          <li>
+            {{ skill }}
+          </li>
+          {% endfor %}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h4>Private Projects</h4>
+        <ul class="circle--link--list">
+          {% for project in user_projects %}
+          <li>
+            {{ project.project_name }}
+            {{ project.url }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  {% endblock body_content %}
+</body>
+</html>

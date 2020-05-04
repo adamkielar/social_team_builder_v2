@@ -113,7 +113,6 @@ class ProjectDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         context['search_form'] = SearchForm()
-        #context['applicants'] = get_object_or_404(Applicant, project=self.get_object(), user_profile=self.request.user)
         return context
 
 
@@ -208,7 +207,10 @@ class ApplicantList(LoginRequiredMixin, ListView):
             context['user'] = get_object_or_404(User, pk=self.request.user.id)
             context['projects'] = Project.objects.filter(owner=self.request.user)
             context['positions'] = Position.objects.all()
-            context['applicants_filter'] = ApplicantsFilter(self.request.GET, queryset=Applicant.objects.all())
+            context['applicants_filter'] = ApplicantsFilter(
+                self.request.GET,
+                queryset=Applicant.objects.filter(project__owner=self.request.user).prefetch_related('project')
+            )
         return context
 
 
@@ -232,7 +234,7 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
             )
         except IntegrityError:
             messages.warning(self.request, self.warning_message)
-        
+
         else:
             messages.success(self.request, self.success_message)
             self.applicant = get_object_or_404(Applicant, position=self.position, user_profile=self.request.user)

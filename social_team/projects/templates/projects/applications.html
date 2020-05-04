@@ -62,7 +62,8 @@
         </thead>
         <tbody>
         {% for applicant in applicants_filter.qs %}
-          <tr class="clickable-row" data-href="{% url 'accounts:profile_detail' pk=applicant.user_profile.id %}">
+        {% if applicant %}
+          <tr class="clickable-row" data-href="{% url 'accounts:profile_all' pk=applicant.user_profile.id %}">
             <td>
               <h3>{{ applicant.user_profile.full_name}}</h3>
               <p>{{ applicant.project.title }}</p>
@@ -81,6 +82,7 @@
               <h3>{{ applicant.applicant_status }}</h3>
             </td>
           </tr>
+        {% endif %}
         {% endfor %}
         </tbody>
       </table>

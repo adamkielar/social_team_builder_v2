@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, UpdateView
@@ -10,6 +11,24 @@ from projects.models import Project, Position, Applicant
 from projects.forms import SearchForm
 
 
+class ProfileForAll(DetailView):
+    """View to display User profile"""
+    model = User
+    template_name = 'accounts/profile_all.html'
+
+    def get_queryset(self):
+        queryset = super(ProfileForAll, self).get_queryset()
+        return queryset.filter(id__iexact=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileForAll, self).get_context_data(**kwargs)
+        context['search_form'] = SearchForm()
+        context['user_projects'] = UserProject.objects.filter(user=self.kwargs['pk'])
+        context['projects'] = Project.objects.filter(owner=self.kwargs['pk'])
+        context['logged_user'] = get_object_or_404(User, id=self.request.user.id)
+        return context
+
+
 class ProfileDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     """View to display User profile"""
     model = User
@@ -17,11 +36,11 @@ class ProfileDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def test_func(self):
         obj = self.get_object()
-        return obj == self.request.user
-
-    def get_queryset(self):
-        queryset = super(ProfileDetail, self).get_queryset()
-        return queryset.filter(id__iexact=self.request.user.id)
+        user = self.request.user
+        if obj == user:
+            return True
+        else:
+            raise Http404("You can not view this site. You are not the owner of this profile !")
 
     def get_context_data(self, **kwargs):
         context = super(ProfileDetail, self).get_context_data(**kwargs)
@@ -45,7 +64,11 @@ class ProfileUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         obj = self.get_object()
-        return obj == self.request.user
+        user = self.request.user
+        if obj == user:
+            return True
+        else:
+            raise Http404("You can not edit this profile. You are not the owner of this profile !")
 
     def get_object(self, queryset=None):
         return get_object_or_404(User, pk=self.kwargs.get('pk'))
