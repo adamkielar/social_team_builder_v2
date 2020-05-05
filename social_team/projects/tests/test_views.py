@@ -53,7 +53,7 @@ class ProjectPageViewTest(TestCase):
         resp = self.client.get(reverse('projects:project_detail', kwargs={'slug': self.project.slug}))
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'projects/project.html')
-        self.assertTrue(self.applicant, resp.context['applicants'])
+        self.assertTrue(self.project, resp.context['object'])
 
     def test_project_create_view(self):
         self.client.force_login(self.user)

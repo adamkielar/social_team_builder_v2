@@ -33,8 +33,16 @@
         <ul class="circle--group--list">
           {% for position in project.position_set.all %}
           <li>
-            <h3>{{position.title }}</h3>
+            <h3>Job title: {{position.title }}</h3>
             <p>{{ position.description }}</p>
+            <h4>Main skills needed:</h4>
+            {% for skill in position.main_skills.all %}
+            <p>{{ skill }}</p>
+            {% endfor %}
+            <h4>Nice to have:</h4>
+            {% for skill in position.other_skills.all %}
+              {{ skill }}
+            {% endfor %}
             {% user_applied position as apply %}
             {% if position.position_status == 'FILLED' or apply == True  %}
             <a class="button button-primary button-inactive">Position Filled</a>

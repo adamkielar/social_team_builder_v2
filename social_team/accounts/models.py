@@ -1,10 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.utils.text import slugify
-from django.urls import reverse
 
 from cropperjs.models import CropperImageField
 from markdownx.models import MarkdownxField
@@ -66,7 +62,7 @@ class OtherSkill(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
                              related_name='user_skills')
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.name
@@ -77,7 +73,7 @@ class UserProject(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
                              related_name='user_projects')
-    project_name = models.CharField(max_length=255, blank=True, null=True)
+    project_name = models.CharField(max_length=255, blank=True)
     url = models.URLField()
 
     def __str__(self):

@@ -84,16 +84,23 @@ class ProfileUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             context['mainskill_form'] = self.mainskill_form_class(self.request.POST, instance=self.get_object())
             context['otherskill_list_form'] = self.otherskilllist_form_class(self.request.POST,
                                                                              instance=self.get_object())
-            context['otherskill_formset'] = self.otherskill_form_class(self.request.POST, prefix='otherskill')
-            context['userproject_formset'] = self.userproject_form_class(self.request.POST, prefix='userproject')
+            context['otherskill_formset'] = self.otherskill_form_class(self.request.POST,
+                                                                       queryset=OtherSkill.objects.filter(
+                                                                           user=self.get_object()), prefix='otherskill')
+            context['userproject_formset'] = self.userproject_form_class(self.request.POST,
+                                                                         queryset=UserProject.objects.filter(
+                                                                             user=self.get_object()),
+                                                                         prefix='userproject')
         else:
             context['projects'] = Project.objects.filter(owner=self.get_object())
             context['search_form'] = self.search_form_class()
             context['form'] = self.form_class(instance=self.get_object())
             context['mainskill_form'] = self.mainskill_form_class(instance=self.get_object())
             context['otherskill_list_form'] = self.otherskilllist_form_class(instance=self.get_object())
-            context['otherskill_formset'] = self.otherskill_form_class(prefix='otherskill')
-            context['userproject_formset'] = self.userproject_form_class(prefix='userproject')
+            context['otherskill_formset'] = self.otherskill_form_class(
+                queryset=OtherSkill.objects.filter(user=self.get_object()), prefix='otherskill')
+            context['userproject_formset'] = self.userproject_form_class(
+                queryset=UserProject.objects.filter(user=self.get_object()), prefix='userproject')
 
         return context
 
@@ -109,17 +116,20 @@ class ProfileUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         mainskill_form.save()
         otherskill_list_form.instance = self.object
         otherskill_list_form.save()
-        if userproject_formset.is_valid():
+        if userproject_formset.is_valid() and userproject_formset.has_changed():
             for form in userproject_formset:
-                if form.has_changed():
+                if form.is_valid():
                     project = form.save(commit=False)
-                    project.user = self.request.user
+                    project.user = self.object
                     project.save()
-        if otherskill_formset.is_valid():
+        if otherskill_formset.is_valid() and otherskill_formset.has_changed():
             for form in otherskill_formset:
-                if form.has_changed():
-                    otherskill = form.save()
-                    otherskill = OtherSkill.objects.filter(name=otherskill.name)
-                    self.request.user.other_skills.add(*otherskill)
+                if form.is_valid():
+                    otherskill = form.save(commit=False)
+                    otherskill.user = self.object
+                    otherskill.save()
+                    otherskill = OtherSkill.objects.filter(name=otherskill.name, user=self.object)
+                    self.object.other_skills.add(*otherskill)
+                    self.object.save()
 
         return super(ProfileUpdate, self).form_valid(form)

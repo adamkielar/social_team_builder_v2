@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Project, Position, Applicant
+from .models import Project, Position
 from accounts.models import MainSkill, OtherSkill
 
 
@@ -36,10 +36,10 @@ class PositionForm(forms.ModelForm):
     main_skills = forms.ModelMultipleChoiceField(
         queryset=MainSkill.objects.all(),
         widget=forms.SelectMultiple,
-        required=False,
     )
     other_skills = forms.ModelMultipleChoiceField(
         queryset=OtherSkill.objects.all(),
+        widget=forms.SelectMultiple,
         required=False,
     )
 
@@ -80,5 +80,6 @@ PositionFormSet = forms.inlineformset_factory(
         'timeline',
         'position_status',
     ),
-    extra=1,
+    extra=0,
+    can_delete=False,
 )
