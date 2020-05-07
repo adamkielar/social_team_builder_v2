@@ -35,12 +35,10 @@ class ProjectForm(forms.ModelForm):
 class PositionForm(forms.ModelForm):
     main_skills = forms.ModelMultipleChoiceField(
         queryset=MainSkill.objects.all(),
-        widget=forms.SelectMultiple,
     )
     other_skills = forms.ModelMultipleChoiceField(
-        queryset=OtherSkill.objects.all(),
-        widget=forms.SelectMultiple,
         required=False,
+        queryset=OtherSkill.objects.all(),
     )
 
     class Meta:
@@ -80,6 +78,6 @@ PositionFormSet = forms.inlineformset_factory(
         'timeline',
         'position_status',
     ),
-    extra=0,
+    max_num=1,
     can_delete=False,
 )

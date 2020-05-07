@@ -36,7 +36,8 @@ class MainSkillForm(forms.ModelForm):
 
 class OtherSkillFormList(forms.ModelForm):
     other_skills = forms.ModelMultipleChoiceField(
-        queryset=OtherSkill.objects.all()
+        queryset=OtherSkill.objects.all(),
+        required=False
     )
 
     class Meta:

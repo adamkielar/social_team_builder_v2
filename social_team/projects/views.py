@@ -78,7 +78,7 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
         else:
             context['search_form'] = self.search_form_class()
             context['project_form'] = self.form_class()
-            context['position_formset'] = self.position_form_class(queryset=Position.objects.none())
+            context['position_formset'] = self.position_form_class()
         return context
 
     def get_queryset(self):

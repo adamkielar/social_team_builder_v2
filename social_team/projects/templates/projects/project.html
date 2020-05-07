@@ -43,6 +43,7 @@
             {% for skill in position.other_skills.all %}
               {{ skill }}
             {% endfor %}
+            <h4>Contract length: {{ position.timeline }}</h4>
             {% user_applied position as apply %}
             {% if position.position_status == 'FILLED' or apply == True  %}
             <a class="button button-primary button-inactive">Position Filled</a>
