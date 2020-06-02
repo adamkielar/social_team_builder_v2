@@ -1,5 +1,12 @@
                                             # Team Builder | Python and Django
 
+# Description
+This app uses Django framework to create Projects and Positions needed to complete projects. Users can create thier profiles and can apply for positions in this projects or they can create thier own projects.
+
+# Technologies Used in App
+* Django
+* Postgres and SqLite
+* [Django AllAuth](https://pypi.org/project/django-allauth/)
 
 # Installation:
 
@@ -21,10 +28,10 @@ Virtualenv:
 Sample data: User need to add Main Skills and Other Skills (in django admin for example) to create User Profile
 Project includes database, sqlite, with sample data.
 Django admin:
-email: root@test.pl
-password: Testing098
+- email: root@test.pl
+- password: Testing098
 
 To load data to empty sqlite database:
 
-python manage.py loaddata accounts_sample.json
-python manage.py loaddata projects_sample.json
+- python manage.py loaddata accounts_sample.json
+- python manage.py loaddata projects_sample.json
