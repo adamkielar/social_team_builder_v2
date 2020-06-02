@@ -1,16 +1,19 @@
-                                            # Team Builder | Python and Django
+                                             Team Builder | Python and Django
 
 # Description
-This app uses Django framework to create Projects and Positions needed to complete projects. Users can create thier profiles and can apply for positions in this projects or they can create thier own projects.
+This app uses Django framework to create Projects and Positions needed to complete projects. Users can create thier profiles and can apply for positions in this projects or they can create thier own projects. Users can manage thier own projects like approve or reject applicants.
 
-# Technologies Used in App
+# Technologies and Packages Used in App
 * Django
 * Postgres and SqLite
 * [Django AllAuth](https://pypi.org/project/django-allauth/)
+* [Django Cropperjs](https://pypi.org/project/django-cropperjs/)
+* [Django Markdownx](https://pypi.org/project/django-markdownx/)
+* [Django Filter](https://pypi.org/project/django-filter/)
 
-# Installation:
+# How to use:
 
-git clone
+Clone this repository.
 
 Docker: 
 - docker build . 
