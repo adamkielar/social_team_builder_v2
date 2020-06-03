@@ -1,4 +1,4 @@
-                                             Team Builder | Python and Django
+#                                          Team Builder | Python and Django
 
 # Description
 This app uses Django framework to create Projects and Positions needed to complete projects. Users can create thier profiles and can apply for positions in this projects or they can create thier own projects. Users can manage thier own projects like approve or reject applicants.
