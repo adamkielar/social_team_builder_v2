@@ -41,13 +41,12 @@ class ModelTest(TestCase):
 
 class ProfilesModelTest(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            email='test@test.pl',
-            password='testpass'
-        )
-        self.main_skills = MainSkill.objects.create(name='Python')
-        self.other_skills = OtherSkill.objects.create(user=self.user,
-                                                      name='Django')
+        email = 'test@test.pl'
+        password = 'testpass'
+        self.user = get_user_model().objects.create_user(email=email,
+                                                         password=password)
+        main_skills = MainSkill.objects.create(name='Python')
+        other_skills = OtherSkill.objects.create(user=self.user, name='Django')
 
     def test_user_profile_creation(self):
         user = self.user
@@ -58,11 +57,11 @@ class ProfilesModelTest(TestCase):
             content_type='image/png'
         )
         user.bio = 'I am Jason Bourne'
-        user.main_skills.add(self.main_skills)
-        user.other_skills.add(self.other_skills)
+        user.main_skills.add(1)
+        user.other_skills.add(1)
         user.is_active = True
         user.save()
-
+        
         self.assertEqual(user.full_name, 'Jason Bourne')
         self.assertEqual(user.avatar.name[:14], 'avatars/sample')
         self.assertEqual(user.bio, 'I am Jason Bourne')

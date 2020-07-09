@@ -20,8 +20,9 @@ class Project(models.Model):
                               related_name='projects')
     title = models.CharField(max_length=255, unique=True)
     description = MarkdownxField(max_length=2500, blank=True, null=True)
-    project_timeline = MarkdownxField(max_length=500, blank=True, null=True )
-    applicant_requirements = MarkdownxField(max_length=500, blank=True, null=True)
+    project_timeline = MarkdownxField(max_length=500, blank=True, null=True)
+    applicant_requirements = MarkdownxField(max_length=500, blank=True,
+                                            null=True)
     project_status = models.CharField(max_length=255,
                                       choices=PROJECT_STATUS,
                                       blank=True)
@@ -39,7 +40,8 @@ class Project(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse_lazy('projects:project_detail', kwargs={'slug': self.slug})
+        return reverse_lazy('projects:project_detail',
+                            kwargs={'slug': self.slug})
 
 
 class Position(models.Model):

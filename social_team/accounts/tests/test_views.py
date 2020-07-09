@@ -18,13 +18,16 @@ class ProfilePageView(TestCase):
 
         project_name = 'Magic'
         url = 'http://www.test.pl'
-        self.user_project = UserProject.objects.create(user=self.user,
-                                                       project_name=project_name,
-                                                       url=url)
+        self.user_project = UserProject.objects.create(
+            user=self.user,
+            project_name=project_name,
+            url=url
+        )
 
     def test_profile_detail_view(self):
         self.client.force_login(self.user)
-        resp = self.client.get(reverse('accounts:profile_detail', kwargs={'pk': self.user.id}))
+        resp = self.client.get(
+            reverse('accounts:profile_detail', kwargs={'pk': self.user.id}))
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(self.user, resp.context)
         self.assertTemplateUsed(resp, 'accounts/profile.html')
@@ -32,6 +35,7 @@ class ProfilePageView(TestCase):
 
     def test_profile_update_view(self):
         self.client.force_login(self.user)
-        resp = self.client.get(reverse('accounts:profile_edit', kwargs={'pk': self.user.id}))
+        resp = self.client.get(
+            reverse('accounts:profile_edit', kwargs={'pk': self.user.id}))
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'accounts/profile_form.html')

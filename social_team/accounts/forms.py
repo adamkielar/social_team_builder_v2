@@ -30,7 +30,8 @@ class MainSkillForm(forms.ModelForm):
     def clean_main_skills(self):
         data = self.cleaned_data['main_skills']
         if not data:
-            raise forms.ValidationError("Please add at least one item to Skills")
+            raise forms.ValidationError(
+                "Please add at least one item to Skills")
         return data
 
 

@@ -1,7 +1,7 @@
 import django_filters
-from django.db.models import Q
 
-from projects.models import Project, Position, Applicant, POSITION_STATUS, APPLICANT_STATUS
+from projects.models import Project, Position, Applicant, POSITION_STATUS, \
+    APPLICANT_STATUS
 
 
 class PositionStatusFilter(django_filters.FilterSet):

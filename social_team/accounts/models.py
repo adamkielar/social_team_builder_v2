@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
+    PermissionsMixin
 
 from cropperjs.models import CropperImageField
 from markdownx.models import MarkdownxField
@@ -31,13 +32,18 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username"""
-    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+    email = models.EmailField(verbose_name='email address', max_length=255,
+                              unique=True)
     full_name = models.CharField(max_length=255, blank=False, default='')
-    avatar = CropperImageField(dimensions=(240, 240), linked=True, default='avatars/sample.png', upload_to='avatars/')
+    avatar = CropperImageField(dimensions=(240, 240), linked=True,
+                               default='avatars/sample.png',
+                               upload_to='avatars/')
     bio = MarkdownxField()
     date_joined = models.DateTimeField(auto_now_add=True)
-    main_skills = models.ManyToManyField('MainSkill', related_name='mainskills')
-    other_skills = models.ManyToManyField('OtherSkill', related_name='otherskills')
+    main_skills = models.ManyToManyField('MainSkill',
+                                         related_name='mainskills')
+    other_skills = models.ManyToManyField('OtherSkill',
+                                          related_name='otherskills')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

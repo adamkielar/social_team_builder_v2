@@ -15,9 +15,7 @@ This app uses Django framework to create Projects and Positions needed to comple
 
 Clone this repository.
 
-Docker: 
-- docker build . 
-- docker-compose build 
+Docker:
 - docker-compose up 
 - to access postgresql database: docker-compose exec db psql --username=postgres --dbname=postgres
 

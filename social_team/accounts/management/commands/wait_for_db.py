@@ -4,8 +4,9 @@ from django.db import connections
 from django.db.utils import OperationalError
 from django.core.management.base import BaseCommand
 
+
 class Command(BaseCommand):
-    """Command to pause execution of database untill its available"""
+    """Command to pause execution of database until its available"""
 
     def handle(self, *args, **kwargs):
         self.stdout.write('Waiting for database...')

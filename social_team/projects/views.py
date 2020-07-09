@@ -6,12 +6,15 @@ from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, RedirectView
+from django.views.generic import ListView, CreateView, DetailView, \
+    UpdateView, DeleteView, RedirectView
 
 from accounts.models import User, UserProject, MainSkill
 from projects.models import Project, Position, Applicant
-from projects.forms import SearchForm, ProjectForm, PositionForm, PositionFormSet
-from projects.filters import ApplicantsFilter, PositionStatusFilter, ProjectsFilter
+from projects.forms import SearchForm, ProjectForm, PositionForm, \
+    PositionFormSet
+from projects.filters import ApplicantsFilter, PositionStatusFilter, \
+    ProjectsFilter
 
 
 class SearchView(ListView):
@@ -44,7 +47,8 @@ class ProjectAll(ListView):
         queryset = super(ProjectAll, self).get_queryset()
         queryset = queryset.filter(
             project_status='OPEN',
-            position__main_skills__in=User.objects.filter(id=self.request.user.id).values('main_skills__id'),
+            position__main_skills__in=User.objects.filter(
+                id=self.request.user.id).values('main_skills__id'),
         ).prefetch_related(
             'position_set'
         ).distinct()
@@ -53,8 +57,14 @@ class ProjectAll(ListView):
     def get_context_data(self, **kwargs):
         context = super(ProjectAll, self).get_context_data()
         context['search_form'] = SearchForm()
-        context['position_filter'] = PositionStatusFilter(self.request.GET, queryset=Position.objects.all())
-        context['projects_filter'] = ProjectsFilter(self.request.GET, queryset=Project.objects.all())
+        context['position_filter'] = PositionStatusFilter(
+            self.request.GET,
+            queryset=Position.objects.all()
+        )
+        context['projects_filter'] = ProjectsFilter(
+            self.request.GET,
+            queryset=Project.objects.all()
+        )
         return context
 
 
@@ -74,7 +84,8 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
         if self.request.POST:
             context['search_form'] = self.search_form_class()
             context['project_form'] = self.form_class(self.request.POST)
-            context['position_formset'] = self.position_form_class(self.request.POST)
+            context['position_formset'] = self.position_form_class(
+                self.request.POST)
         else:
             context['search_form'] = self.search_form_class()
             context['project_form'] = self.form_class()
@@ -131,21 +142,29 @@ class ProjectEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         else:
             if user.is_authenticated():
-                raise Http404("You can not edit this Project. You are not the Owner !")
+                raise Http404(
+                    "You can not edit this Project. You are not the Owner !")
 
     def get_success_url(self):
-        return reverse_lazy('projects:project_detail', kwargs={'slug': self.get_object().slug})
+        return reverse_lazy('projects:project_detail',
+                            kwargs={'slug': self.get_object().slug})
 
     def get_context_data(self, **kwargs):
         context = super(ProjectEdit, self).get_context_data(**kwargs)
         if self.request.POST:
             context['search_form'] = self.search_form_class()
-            context['project_form'] = self.form_class(self.request.POST, instance=self.get_object())
-            context['position_formset'] = self.position_form_class(self.request.POST, instance=self.get_object())
+            context['project_form'] = self.form_class(
+                self.request.POST,
+                instance=self.get_object()
+            )
+            context['position_formset'] = self.position_form_class(
+                self.request.POST, instance=self.get_object())
         else:
             context['search_form'] = self.search_form_class()
-            context['project_form'] = self.form_class(instance=self.get_object())
-            context['position_formset'] = self.position_form_class(instance=self.get_object())
+            context['project_form'] = self.form_class(
+                instance=self.get_object())
+            context['position_formset'] = self.position_form_class(
+                instance=self.get_object())
         return context
 
     def form_valid(self, form):
@@ -176,7 +195,8 @@ class ProjectDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             if user.is_authenticated():
-                raise Http404("You can not delete this Project. You are not the Owner !")
+                raise Http404(
+                    "You can not delete this Project. You are not the Owner !")
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
@@ -192,7 +212,10 @@ class ProjectDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class ApplicantList(LoginRequiredMixin, ListView):
-    """View for all Applicant that apply for User Project and User applications for other projects"""
+    """
+    View for all Applicant that apply for User Project
+    and User applications for other projects.
+    """
     model = Applicant
     search_form_class = SearchForm
     template_name = 'projects/applications.html'
@@ -205,22 +228,24 @@ class ApplicantList(LoginRequiredMixin, ListView):
         else:
             context['search_form'] = self.search_form_class()
             context['user'] = get_object_or_404(User, pk=self.request.user.id)
-            context['projects'] = Project.objects.filter(owner=self.request.user)
+            context['projects'] = Project.objects.filter(
+                owner=self.request.user)
             context['positions'] = Position.objects.all()
             context['applicants_filter'] = ApplicantsFilter(
                 self.request.GET,
-                queryset=Applicant.objects.filter(project__owner=self.request.user).prefetch_related('project')
+                queryset=Applicant.objects.filter(
+                    project__owner=self.request.user).prefetch_related(
+                    'project')
             )
         return context
 
 
 class ApplicantCreate(LoginRequiredMixin, RedirectView):
     """View to create Applicant object after apply for position"""
+    url = 'projects:projects_all'
+
     success_message = 'You applied for position successfully !'
     warning_message = 'You already applied for that position !'
-
-    def get_redirect_url(self, *args, **kwargs):
-        return reverse('projects:projects_all')
 
     def get(self, request, *args, **kwargs):
         self.position = get_object_or_404(Position, pk=self.kwargs.get('pk'))
@@ -237,7 +262,9 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
 
         else:
             messages.success(self.request, self.success_message)
-            self.applicant = get_object_or_404(Applicant, position=self.position, user_profile=self.request.user)
+            self.applicant = get_object_or_404(Applicant,
+                                               position=self.position,
+                                               user_profile=self.request.user)
             send_mail(
                 'Application for ' + self.project.title,
                 'You applied for ' + self.position.title + ' position in ' + self.project.title + ' project!',
@@ -253,19 +280,24 @@ class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
     success_message = 'You changed applicant status successfully !'
 
     def test_func(self):
-        self.position = get_object_or_404(Position, pk=self.kwargs.get('position_pk'))
+        self.position = get_object_or_404(Position,
+                                          pk=self.kwargs.get('position_pk'))
         self.project = get_object_or_404(Project, id=self.position.project.id)
-        self.applicant = get_object_or_404(Applicant, pk=self.kwargs.get('applicant_pk'))
+        self.applicant = get_object_or_404(Applicant,
+                                           pk=self.kwargs.get('applicant_pk'))
         owner = self.project.owner
         user = self.request.user
         if owner == user:
             return True
         else:
             if user.is_authenticated():
-                raise Http404("You can not change applicant status. You are not the owner of this project !")
+                raise Http404(
+                    "You are not the owner of this project !"
+                )
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse('projects:applications', kwargs={'pk': self.request.user.id})
+        return reverse('projects:applications',
+                       kwargs={'pk': self.request.user.id})
 
     def get(self, request, *args, **kwargs):
         if request.POST.get('approve'):

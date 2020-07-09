@@ -7,12 +7,13 @@ from projects.models import Project, Position, Applicant
 
 class ProjectsModelsTest(TestCase):
     def setUp(self):
-        email = 'test@test.pl'
-        password = 'testpass'
-        self.user = get_user_model().objects.create_user(email=email,
-                                                         password=password)
+        self.user = get_user_model().objects.create_user(
+            email='test@test.pl',
+            password='testpass'
+        )
         self.main_skills = MainSkill.objects.create(name='Python')
-        self.other_skills = OtherSkill.objects.create(user=self.user, name='Django')
+        self.other_skills = OtherSkill.objects.create(user=self.user,
+                                                      name='Django')
         self.project = Project.objects.create(
             owner=self.user,
             title='Twitter',
@@ -30,7 +31,6 @@ class ProjectsModelsTest(TestCase):
 
     def test_project_creation(self):
         """Test creation Project model"""
-        self.user = get_user_model().objects.get(id=1)
         project = Project.objects.create(
             owner=self.user,
             title='Calculator',
@@ -51,8 +51,8 @@ class ProjectsModelsTest(TestCase):
             description='testing',
             position_status='APPLY'
         )
-        position.main_skills.add(1)
-        position.other_skills.add(1)
+        position.main_skills.add(self.main_skills)
+        position.other_skills.add(self.other_skills)
         position.save()
 
         self.assertEqual(str(position.title), 'Python Developer')
