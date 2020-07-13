@@ -4,7 +4,7 @@ LABEL maintainer="Adam Kielar"
 ## install dependencies
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y netcat-openbsd gcc && \
+    apt-get install -y netcat-openbsd gcc libpq-dev && \
     apt-get install -y --no-install-recommends libnss-wrapper && \
 	rm -rf /var/lib/apt/lists/* && \
     apt-get clean
