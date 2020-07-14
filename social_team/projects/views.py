@@ -269,10 +269,13 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
                 'Application for ' + self.project.title,
                 'You applied for ' + self.position.title + ' position in ' + self.project.title + ' project!',
                 'adam@adamkielar.pl',
-                ['adam@adamkielar.pl'],
+                [self.applicant.user_profile.email],
                 fail_silently=False,
             )
         return super(ApplicantCreate, self).get(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return self.url
 
 
 class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
