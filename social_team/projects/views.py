@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
@@ -268,7 +269,7 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
             send_mail(
                 'Application for ' + self.project.title,
                 'You applied for ' + self.position.title + ' position in ' + self.project.title + ' project!',
-                'adam@adamkielar.pl',
+                settings.DEFAULT_FROM_EMAIL,
                 [self.applicant.user_profile.email],
                 fail_silently=False,
             )
@@ -313,7 +314,7 @@ class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
             send_mail(
                 'You are Accepted',
                 'You are accepted for ' + self.position.title + ' position in ' + self.project.title + ' project!',
-                self.request.user.email,
+                settings.DEFAULT_FROM_EMAIL,
                 [self.applicant.user_profile.email],
                 fail_silently=False,
             )
@@ -326,7 +327,7 @@ class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
             send_mail(
                 'You are not accepted',
                 'You are not accepted for ' + self.position.title + ' position in ' + self.project.title + ' project!',
-                self.request.user.email,
+                settings.DEFAULT_FROM_EMAIL,
                 [self.applicant.user_profile.email],
                 fail_silently=False,
             )
