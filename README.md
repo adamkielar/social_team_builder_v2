@@ -11,6 +11,15 @@ This app uses Django framework to create Projects and Positions needed to comple
 * [Django Markdownx](https://pypi.org/project/django-markdownx/)
 * [Django Filter](https://pypi.org/project/django-filter/)
 
+# Deployment version
+
+[Social Team Builder](https://social-team-builder-devops.herokuapp.com/)
+1. Deployment version is on feature/heroku branch
+2. Project is running on heroku with additional features:
+- integrated Sendgrid to send emails to users
+- integrated GitHub to allow users log in with github account (different settings for live site)
+- integrated Postgres database
+
 # How to use:
 
 Clone this repository.
