@@ -25,13 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'foo')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', True)
 
-ALLOWED_HOSTS = []
-ALLOWED_HOSTS.extend(
-    filter(
-        None,
-        os.environ.get('ALLOWED_HOSTS', '').split(',')
-    )
-)
+ALLOWED_HOSTS = ['social-team-builder-devops.herokuapp.com']
 
 # Application definition
 
