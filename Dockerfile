@@ -20,7 +20,7 @@ RUN addgroup --system user && adduser --system --no-create-home --group user
 RUN chown -R user:user /social_team && chmod -R 755 /social_team
 
 ## install dependencies
-COPY ./requirements.txt /requirements.txt
+COPY requirements.txt /requirements.txt
 RUN pip install --upgrade pip && pip install -r /requirements.txt
 
 USER user
