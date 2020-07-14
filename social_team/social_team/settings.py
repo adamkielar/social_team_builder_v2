@@ -173,6 +173,3 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/' 
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'emails')
