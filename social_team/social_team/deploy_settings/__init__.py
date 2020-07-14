@@ -9,3 +9,4 @@ DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_SANDBOX_MODE_IN_DEBUG=False
