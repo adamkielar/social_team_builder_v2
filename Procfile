@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath social_team social_team.wsgi --log-file -
+web: gunicorn --pythonpath social_team social_team.deploy --log-file -
