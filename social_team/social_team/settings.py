@@ -146,8 +146,6 @@ STATICFILES_DIRS = (
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-#LOGIN_REDIRECT_URL = "posts:all"
-
 # User files
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
