@@ -274,7 +274,7 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
             )
         return super(ApplicantCreate, self).get(request, *args, **kwargs)
 
-    def get_redirect_url(self):
+    def get_redirect_url(self, *args, **kwargs):
         return reverse('projects:projects_all')
 
 
