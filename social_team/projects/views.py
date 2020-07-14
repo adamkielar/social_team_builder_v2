@@ -243,7 +243,6 @@ class ApplicantList(LoginRequiredMixin, ListView):
 
 class ApplicantCreate(LoginRequiredMixin, RedirectView):
     """View to create Applicant object after apply for position"""
-    url = 'projects:projects_all'
 
     success_message = 'You applied for position successfully !'
     warning_message = 'You already applied for that position !'
@@ -275,8 +274,8 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
             )
         return super(ApplicantCreate, self).get(request, *args, **kwargs)
 
-    def get_redirect_url(self, *args, **kwargs):
-        return self.url
+    def get_redirect_url(self):
+        return reverse('projects:projects_all')
 
 
 class ApplicantStatus(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
