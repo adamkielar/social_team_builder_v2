@@ -268,8 +268,8 @@ class ApplicantCreate(LoginRequiredMixin, RedirectView):
             send_mail(
                 'Application for ' + self.project.title,
                 'You applied for ' + self.position.title + ' position in ' + self.project.title + ' project!',
-                self.request.user.email,
-                [self.applicant.user_profile.email],
+                'adam@adamkielar.pl',
+                ['adam@adamkielar.pl'],
                 fail_silently=False,
             )
         return super(ApplicantCreate, self).get(request, *args, **kwargs)
