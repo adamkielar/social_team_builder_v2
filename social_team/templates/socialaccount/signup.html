@@ -5,12 +5,14 @@
 
 {% block head_title %}Sign Up | {{ block.super }}{% endblock head_title %}
 
-<p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
-{{site_name}}. As a final step, please complete the following form:</p>
-
 {% block body_content %}
 <div class="bounds">
     <div class="grid-30 centered">
+
+<p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
+{{site_name}}. As a final step, please complete the following form:</p>
+
+
       <h2>Sign Up</h2>
 <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
   {% csrf_token %}
