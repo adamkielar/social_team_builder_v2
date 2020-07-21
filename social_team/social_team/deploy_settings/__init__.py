@@ -7,7 +7,7 @@ db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
