@@ -11,7 +11,7 @@
         {% csrf_token %}
         {{ form }}
         <button type="submit" class="button-primary">Sign Up</button>
-        <a class="button" href="">Sign In</a>
+        <a class="button" href="{% url 'account_login' %}">Sign In</a>
       </form>
     </div>
   </div>
